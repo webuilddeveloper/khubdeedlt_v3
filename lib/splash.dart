@@ -48,13 +48,17 @@ class _SplashPageState extends State<SplashPage> {
     String? value = await storage.read(key: 'profileCode2');
 
     if (value != null && value != '') {
-      // Navigator.of(context).pushAndRemoveUntil(
-      //   MaterialPageRoute(
-      //     builder: (context) => HomePageV2(),
-      //   ),
-      //   (Route<dynamic> route) => false,
-      // );
+      print(
+          '-------------------------------HomePageV2---------------------------------');
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => HomePageV2(),
+        ),
+        (Route<dynamic> route) => false,
+      );
     } else {
+      print(
+          '-------------------------------LoginPage---------------------------------');
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => LoginPage(

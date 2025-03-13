@@ -99,8 +99,8 @@ class _LoginPageState extends State<LoginPage> {
         height: 40,
         onPressed: () {
           loginWithGuest();
-          // print('--------------->>> ');
-          loginWithGuest();
+          print(
+              '-------------------------------loginWithGuest----1-----------------------------');
         },
         child: const Text(
           'เข้าสู่ระบบ',
@@ -484,7 +484,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void checkStatus() async {
-    final storage = FlutterSecureStorage();
+    const storage = FlutterSecureStorage();
     String? value = await storage.read(key: 'dataUserLoginDDPM');
     if (value != null && value != '') {
       // Navigator.of(context).pushAndRemoveUntil(
@@ -498,14 +498,15 @@ class _LoginPageState extends State<LoginPage> {
 
   //login username / password
   Future<dynamic> login() async {
-    if ((_username == null || _username == '') && _category == 'guest') {
+    print('----------------------------register------------------------------');
+    if ((_username == '') && _category == 'guest') {
       return showDialog(
         barrierDismissible: false,
         context: context,
         builder: (BuildContext context) => CupertinoAlertDialog(
-          title: Text(
+          title: const Text(
             'กรุณากรอกชื่อผู้ใช้',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontFamily: 'Sarabun',
               color: Colors.black,
@@ -516,9 +517,9 @@ class _LoginPageState extends State<LoginPage> {
           actions: [
             CupertinoDialogAction(
               isDefaultAction: true,
-              child: Text(
+              child: const Text(
                 "ตกลง",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
                   fontFamily: 'Sarabun',
                   color: Color(0xFF000070),
@@ -532,14 +533,14 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       );
-    } else if ((_password == null || _password == '') && _category == 'guest') {
+    } else if ((_password == '') && _category == 'guest') {
       return showDialog(
         barrierDismissible: false,
         context: context,
         builder: (BuildContext context) => CupertinoAlertDialog(
-          title: Text(
+          title: const Text(
             'กรุณากรอกรหัสผ่าน',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontFamily: 'Sarabun',
               color: Colors.black,
@@ -550,9 +551,9 @@ class _LoginPageState extends State<LoginPage> {
           actions: [
             CupertinoDialogAction(
               isDefaultAction: true,
-              child: Text(
+              child: const Text(
                 "ตกลง",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
                   fontFamily: 'Sarabun',
                   color: Color(0xFF000070),
@@ -594,12 +595,12 @@ class _LoginPageState extends State<LoginPage> {
         storage.write(
             key: 'profileLastName', value: result.objectData?.lastName);
 
-        // Navigator.of(context).pushAndRemoveUntil(
-        //   MaterialPageRoute(
-        //     builder: (context) => HomePageV2(),
-        //   ),
-        //   (Route<dynamic> route) => false,
-        // );
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => HomePageV2(),
+          ),
+          (Route<dynamic> route) => false,
+        );
       } else {
         if (_category == 'guest') {
           return showDialog(
@@ -619,9 +620,9 @@ class _LoginPageState extends State<LoginPage> {
               actions: [
                 CupertinoDialogAction(
                   isDefaultAction: true,
-                  child: Text(
+                  child: const Text(
                     "ตกลง",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontFamily: 'Sarabun',
                       color: Color(0xFF000070),
@@ -643,6 +644,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<dynamic> register() async {
+    print('----------------------------register------------------------------');
     final result = await postLoginRegister('m/Register/create', {
       'username': _username,
       'password': _password,
@@ -714,7 +716,8 @@ class _LoginPageState extends State<LoginPage> {
 
   //login guest
   void loginWithGuest() async {
-    // print('-----------START');
+    print('-----------START loginWithGuest---------');
+
     setState(() {
       _category = 'guest';
       _username = txtUsername.text;
