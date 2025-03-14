@@ -1,14 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as datatTimePicker;
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    // ignore: library_prefixes
     as datatTimePicker;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../shared/api_provider.dart';
 import '../../widget/header.dart';
@@ -17,20 +16,23 @@ import '../blank_page/dialog_fail.dart';
 import 'user_information.dart';
 
 class EditUserInformationPage extends StatefulWidget {
+  const EditUserInformationPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _EditUserInformationPageState createState() =>
       _EditUserInformationPageState();
 }
 
 class _EditUserInformationPageState extends State<EditUserInformationPage> {
-  final storage = new FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   String? _imageUrl;
   String? _code;
 
   final _formKey = GlobalKey<FormState>();
 
-  List<dynamic> _itemSex = [
+  final List<dynamic> _itemSex = [
     {'title': 'ชาย', 'code': 'ชาย'},
     {'title': 'หญิง', 'code': 'หญิง'},
     {'title': 'ไม่ระบุเพศ', 'code': ''}
@@ -70,7 +72,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
 
   Future<dynamic>? _futureProfile;
 
-  ScrollController scrollController = new ScrollController();
+  ScrollController scrollController = ScrollController();
 
   XFile? _image;
 
@@ -87,7 +89,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
     // futureModel = getUser();
 
     scrollController = ScrollController();
-    var now = new DateTime.now();
+    var now = DateTime.now();
     setState(() {
       year = now.year;
       month = now.month;
@@ -122,180 +124,180 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
             _bindingData(snapshot.data);
-            return Container(
-              child: ListView(
-                controller: scrollController,
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                // padding: const EdgeInsets.all(10.0),
-                children: <Widget>[
-                  // new Column(
-                  //   // alignment: Alignment.topCenter,
-                  //   children: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      Container(
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: AssetImage(
-                              'assets/background/backgroundUserInfo.png',
-                            ),
-                          ),
-                        ),
-                        height: 150.0,
-                      ),
-                      Container(
-                        height: 150.0,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: AssetImage(
-                              'assets/background/backgroundUserInfoColor.png',
-                            ),
+            return ListView(
+              controller: scrollController,
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              // padding: const EdgeInsets.all(10.0),
+              children: <Widget>[
+                //  Column(
+                //   // alignment: Alignment.topCenter,
+                //   children: <Widget>[
+                Stack(
+                  children: <Widget>[
+                    Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage(
+                            'assets/background/backgroundUserInfo.png',
                           ),
                         ),
                       ),
-                      // Container(
-                      //   height: 150.0,
-                      //   width: 150.0,
-                      //   decoration: BoxDecoration(
-                      //     image: DecorationImage(
-                      //       fit: BoxFit.fill,
-                      //       image: AssetImage(
-                      //         'assets/background/backgroundUserInfoColor.png',
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      Center(
-                        child: Container(
-                          width: 90.0,
-                          height: 90.0,
-                          margin: const EdgeInsets.only(top: 30.0),
-                          padding: EdgeInsets.all(
-                              _imageUrl != null && _imageUrl != '' ? 0.0 : 5.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(45),
-                              color: Colors.white70),
-                          child: GestureDetector(
-                            onTap: () {
-                              _showPickerImage(context);
-                            },
-                            child: _imageUrl != null && _imageUrl != ''
-                                ? CircleAvatar(
-                                    backgroundColor: Colors.black,
-                                    backgroundImage:
-                                        _imageUrl != null && _imageUrl != ''
-                                            ? NetworkImage(_imageUrl!)
-                                            : null,
-                                  )
-                                : Container(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Image.asset(
-                                      'assets/images/user_not_found.png',
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                    ),
+                      height: 150.0,
+                    ),
+                    Container(
+                      height: 150.0,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage(
+                            'assets/background/backgroundUserInfoColor.png',
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Container(
+                    //   height: 150.0,
+                    //   width: 150.0,
+                    //   decoration: BoxDecoration(
+                    //     image: DecorationImage(
+                    //       fit: BoxFit.fill,
+                    //       image: AssetImage(
+                    //         'assets/background/backgroundUserInfoColor.png',
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    Center(
+                      child: Container(
+                        width: 90.0,
+                        height: 90.0,
+                        margin: const EdgeInsets.only(top: 30.0),
+                        padding: EdgeInsets.all(
+                            _imageUrl != null && _imageUrl != '' ? 0.0 : 5.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(45),
+                            color: Colors.white70),
+                        child: GestureDetector(
+                          onTap: () {
+                            _showPickerImage(context);
+                          },
+                          child: _imageUrl != null && _imageUrl != ''
+                              ? CircleAvatar(
+                                  backgroundColor: Colors.black,
+                                  backgroundImage:
+                                      _imageUrl != null && _imageUrl != ''
+                                          ? NetworkImage(_imageUrl!)
+                                          : null,
+                                )
+                              : Container(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Image.asset(
+                                    'assets/images/user_not_found.png',
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary,
                                   ),
-                          ),
+                                ),
                         ),
                       ),
-                      Center(
-                        child: Container(
-                          width: 25.0,
-                          height: 25.0,
-                          margin: const EdgeInsets.only(top: 90.0, left: 70.0),
-                          // decoration: ShapeDecoration(
-                          //   shape: CircleBorder(),
-                          //   color: Color(0xFFFC4137),
-                          // ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(0.0),
-                            child: DecoratedBox(
-                              decoration: ShapeDecoration(
-                                shape: CircleBorder(),
-                                image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  alignment: Alignment.center,
-                                  image: AssetImage(
-                                      "assets/logo/icons/Group37.png"),
-                                ),
+                    ),
+                    Center(
+                      child: Container(
+                        width: 25.0,
+                        height: 25.0,
+                        margin: const EdgeInsets.only(top: 90.0, left: 70.0),
+                        // decoration: ShapeDecoration(
+                        //   shape: CircleBorder(),
+                        //   color: Color(0xFFFC4137),
+                        // ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(0.0),
+                          child: DecoratedBox(
+                            decoration: ShapeDecoration(
+                              shape: CircleBorder(),
+                              image: DecorationImage(
+                                fit: BoxFit.contain,
+                                alignment: Alignment.center,
+                                image: AssetImage(
+                                    "assets/logo/icons/Group37.png"),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: contentCard(),
-                  ),
-                  // Container(
-                  //   width: 150.0,
-                  //   height: 150.0,
-                  //   child: GestureDetector(
-                  //     onTap: () {
-                  //       _showPickerImage(context);
-                  //     },
-                  //     child: Padding(
-                  //       padding: EdgeInsets.all(0.0),
-                  //       child: DecoratedBox(
-                  //         decoration: ShapeDecoration(
-                  //           shape: CircleBorder(),
-                  //           image: DecorationImage(
-                  //             fit: BoxFit.cover,
-                  //             image: _imageUrl != null
-                  //                 ? NetworkImage(_imageUrl)
-                  //                 : Image.asset(
-                  //                     "assets/logo/noImage.png"),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // Container(
-                  //   width: 50.0,
-                  //   height: 50.0,
-                  //   margin: EdgeInsets.only(top: 110.0, left: 110.0),
-                  //   // decoration: ShapeDecoration(
-                  //   //   shape: CircleBorder(),
-                  //   //   color: Color(0xFFFC4137),
-                  //   // ),
-                  //   child: GestureDetector(
-                  //     onTap: () {
-                  //       _showPickerImage(context);
-                  //     },
-                  //     child: Padding(
-                  //       padding: EdgeInsets.only(top: 0.0),
-                  //       child: DecoratedBox(
-                  //         decoration: ShapeDecoration(
-                  //           shape: CircleBorder(),
-                  //           image: DecorationImage(
-                  //             fit: BoxFit.cover,
-                  //             image: AssetImage(
-                  //                 "assets/icons/Group6326.png"),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
+                    ),
+                  ],
+                ),
+                Container(
+                  color: Colors.white,
+                  child: contentCard(),
+                ),
+                // Container(
+                //   width: 150.0,
+                //   height: 150.0,
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       _showPickerImage(context);
+                //     },
+                //     child: Padding(
+                //       padding: EdgeInsets.all(0.0),
+                //       child: DecoratedBox(
+                //         decoration: ShapeDecoration(
+                //           shape: CircleBorder(),
+                //           image: DecorationImage(
+                //             fit: BoxFit.cover,
+                //             image: _imageUrl != null
+                //                 ? NetworkImage(_imageUrl)
+                //                 : Image.asset(
+                //                     "assets/logo/noImage.png"),
+                //           ),
+                //         ),
+                //       ),
+                //     ),
                 //   ),
-                // ],
-              ),
+                // ),
+                // Container(
+                //   width: 50.0,
+                //   height: 50.0,
+                //   margin: EdgeInsets.only(top: 110.0, left: 110.0),
+                //   // decoration: ShapeDecoration(
+                //   //   shape: CircleBorder(),
+                //   //   color: Color(0xFFFC4137),
+                //   // ),
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       _showPickerImage(context);
+                //     },
+                //     child: Padding(
+                //       padding: EdgeInsets.only(top: 0.0),
+                //       child: DecoratedBox(
+                //         decoration: ShapeDecoration(
+                //           shape: CircleBorder(),
+                //           image: DecorationImage(
+                //             fit: BoxFit.cover,
+                //             image: AssetImage(
+                //                 "assets/icons/Group6326.png"),
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
+              //   ),
+              // ],
             );
           } else if (snapshot.hasError)
+            // ignore: curly_braces_in_flow_control_structures
             return Center(
                 child: Container(
               color: Colors.white,
               child: dialogFail(context),
             ));
           else
+            // ignore: curly_braces_in_flow_control_structures
             return Container();
         },
       ),
@@ -305,10 +307,11 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
   _read() async {
     //read profile
     var profileCode = await storage.read(key: 'profileCode2');
-    if (profileCode != '' && profileCode != null)
+    if (profileCode != '' && profileCode != null) {
       setState(() {
         _futureProfile = postDio('${registerApi}read', {'code': profileCode});
       });
+    }
 
     final result = await postObjectData("route/province/read", {});
     if (result['status'] == 'S') {
@@ -523,11 +526,11 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
     var user = json.decode(value!);
     user['imageUrl'] = _imageUrl ?? '';
     // user['prefixName'] = _selectedPrefixName ?? '';
-    user['prefixName'] = txtPrefixName.text ?? '';
-    user['firstName'] = txtFirstName.text ?? '';
-    user['lastName'] = txtLastName.text ?? '';
-    user['email'] = txtEmail.text ?? '';
-    user['phone'] = txtPhone.text ?? '';
+    user['prefixName'] = txtPrefixName.text;
+    user['firstName'] = txtFirstName.text;
+    user['lastName'] = txtLastName.text;
+    user['email'] = txtEmail.text;
+    user['phone'] = txtPhone.text;
 
     user['birthDay'] = DateFormat("yyyyMMdd").format(
       DateTime(
@@ -537,10 +540,10 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
       ),
     );
     user['sex'] = _selectedSex ?? '';
-    user['address'] = txtAddress.text ?? '';
-    user['soi'] = txtSoi.text ?? '';
-    user['moo'] = txtMoo.text ?? '';
-    user['road'] = txtRoad.text ?? '';
+    user['address'] = txtAddress.text;
+    user['soi'] = txtSoi.text;
+    user['moo'] = txtMoo.text;
+    user['road'] = txtRoad.text;
     user['tambon'] = '';
     user['amphoe'] = '';
     user['province'] = '';
@@ -549,11 +552,11 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
     user['amphoeCode'] = _selectedDistrict ?? '';
     user['provinceCode'] = _selectedProvince ?? '';
     user['postnoCode'] = _selectedPostalCode ?? '';
-    user['idcard'] = txtIdCard.text ?? '';
-    user['officerCode'] = txtOfficerCode.text ?? '';
+    user['idcard'] = txtIdCard.text;
+    user['officerCode'] = txtOfficerCode.text;
     user['linkAccount'] =
-        user['linkAccount'] != null ? user['linkAccount'] : '';
-    user['appleID'] = user['appleID'] != null ? user['appleID'] : "";
+        user['linkAccount'] ?? '';
+    user['appleID'] = user['appleID'] ?? "";
 
     final result = await postObjectData('m/Register/update', user);
 
@@ -571,16 +574,18 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
 
       return showDialog(
         barrierDismissible: false,
+        // ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
+          // ignore: deprecated_member_use
           return WillPopScope(
             onWillPop: () {
               return Future.value(false);
             },
             child: CupertinoAlertDialog(
-              title: new Text(
+              title: const Text(
                 'อัพเดตข้อมูลเรียบร้อยแล้ว',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontFamily: 'Sarabun',
                   color: Colors.black,
@@ -591,9 +596,9 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
               actions: [
                 CupertinoDialogAction(
                   isDefaultAction: true,
-                  child: new Text(
+                  child: const Text(
                     "ตกลง",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontFamily: 'Sarabun',
                       color: Color(0xFF000070),
@@ -617,23 +622,25 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
       );
     } else {
       return showDialog(
+        // ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
+          // ignore: deprecated_member_use
           return WillPopScope(
             onWillPop: () {
               return Future.value(false);
             },
             child: CupertinoAlertDialog(
-              title: new Text(
+              title: const Text(
                 'อัพเดตข้อมูลไม่สำเร็จ',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontFamily: 'Sarabun',
                   color: Colors.black,
                   fontWeight: FontWeight.normal,
                 ),
               ),
-              content: new Text(
+              content: Text(
                 result['message'],
                 style: const TextStyle(
                   fontSize: 13,
@@ -645,9 +652,9 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
               actions: [
                 CupertinoDialogAction(
                   isDefaultAction: true,
-                  child: new Text(
+                  child: const Text(
                     "ตกลง",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontFamily: 'Sarabun',
                       color: Color(0xFF000070),
@@ -829,7 +836,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
               false,
               false,
             ),
-            // new Container(
+            //  Container(
             //   width: 5000.0,
             //   padding: EdgeInsets.symmetric(
             //     horizontal: 5,
@@ -866,14 +873,14 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
             //     ),
             //     value: _selectedPrefixName != '' ? _selectedPrefixName : '',
 
-            //     onChanged: (newValue) {
+            //     onChanged: (Value) {
             //       setState(() {
-            //         _selectedPrefixName = newValue;
+            //         _selectedPrefixName = Value;
             //       });
             //     },
             //     items: _itemPrefixName.map((prefixName) {
             //       return DropdownMenuItem(
-            //         child: new Text(
+            //         child:  Text(
             //           prefixName,
             //           style: TextStyle(
             //             fontSize: 15.00,
@@ -986,7 +993,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
             ),
             labelTextFormField('* เพศ'),
 
-            new Container(
+            Container(
               width: 5000.0,
               padding: const EdgeInsets.symmetric(
                 horizontal: 5,
@@ -1022,14 +1029,16 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                   ),
                 ),
                 value: _selectedSex,
-                onChanged: (newValue) {
+                // ignore: non_constant_identifier_names
+                onChanged: (Value) {
                   setState(() {
-                    _selectedSex = newValue.toString();
+                    _selectedSex = Value.toString();
                   });
                 },
                 items: _itemSex.map((item) {
                   return DropdownMenuItem(
-                    child: new Text(
+                    value: item['code'],
+                    child: Text(
                       item['title'],
                       style: const TextStyle(
                         fontSize: 15.00,
@@ -1039,7 +1048,6 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                         ),
                       ),
                     ),
-                    value: item['code'],
                   );
                 }).toList(),
               ),
@@ -1073,7 +1081,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
               false,
             ),
             labelTextFormField('* จังหวัด'),
-            new Container(
+            Container(
               width: 5000.0,
               padding: const EdgeInsets.symmetric(
                 horizontal: 5,
@@ -1110,7 +1118,8 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                         ),
                       ),
                       value: _selectedProvince,
-                      onChanged: (newValue) {
+                      // ignore: non_constant_identifier_names
+                      onChanged: (Value) {
                         setState(() {
                           _selectedDistrict = "";
                           _itemDistrict = [];
@@ -1118,13 +1127,14 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                           _itemSubDistrict = [];
                           _selectedPostalCode = "";
                           _itemPostalCode = [];
-                          _selectedProvince = newValue.toString();
+                          _selectedProvince = Value.toString();
                         });
                         getDistrict();
                       },
                       items: _itemProvince.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
                             style: const TextStyle(
                               fontSize: 15.00,
@@ -1134,7 +1144,6 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     )
@@ -1161,7 +1170,8 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                           fontFamily: 'Sarabun',
                         ),
                       ),
-                      onChanged: (newValue) {
+                      // ignore: non_constant_identifier_names
+                      onChanged: (Value) {
                         setState(() {
                           _selectedDistrict = "";
                           _itemDistrict = [];
@@ -1169,13 +1179,14 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                           _itemSubDistrict = [];
                           _selectedPostalCode = "";
                           _itemPostalCode = [];
-                          _selectedProvince = newValue.toString();
+                          _selectedProvince = Value.toString();
                         });
                         getDistrict();
                       },
                       items: _itemProvince.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
                             style: const TextStyle(
                               fontSize: 15.00,
@@ -1185,7 +1196,6 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     ),
@@ -1193,7 +1203,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
 
             labelTextFormField('* อำเภอ'),
 
-            new Container(
+            Container(
               width: 5000.0,
               padding: const EdgeInsets.symmetric(
                 horizontal: 5,
@@ -1230,19 +1240,21 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                         ),
                       ),
                       value: _selectedDistrict,
-                      onChanged: (newValue) {
+                      // ignore: non_constant_identifier_names
+                      onChanged: (Value) {
                         setState(() {
                           _selectedSubDistrict = "";
                           _itemSubDistrict = [];
                           _selectedPostalCode = "";
                           _itemPostalCode = [];
-                          _selectedDistrict = newValue.toString();
+                          _selectedDistrict = Value.toString();
                           getSubDistrict();
                         });
                       },
                       items: _itemDistrict.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
                             style: const TextStyle(
                               fontSize: 15.00,
@@ -1252,7 +1264,6 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     )
@@ -1279,19 +1290,21 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                           fontFamily: 'Sarabun',
                         ),
                       ),
-                      onChanged: (newValue) {
+                      // ignore: non_constant_identifier_names
+                      onChanged: (Value) {
                         setState(() {
                           _selectedSubDistrict = "";
                           _itemSubDistrict = [];
                           _selectedPostalCode = "";
                           _itemPostalCode = [];
-                          _selectedDistrict = newValue.toString();
+                          _selectedDistrict = Value.toString();
                           getSubDistrict();
                         });
                       },
                       items: _itemDistrict.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
                             style: const TextStyle(
                               fontSize: 15.00,
@@ -1301,14 +1314,13 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     ),
             ),
 
             labelTextFormField('* ตำบล'),
-            new Container(
+            Container(
               width: 5000.0,
               padding: const EdgeInsets.symmetric(
                 horizontal: 5,
@@ -1345,17 +1357,18 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                         ),
                       ),
                       value: _selectedSubDistrict,
-                      onChanged: (newValue) {
+                      onChanged: (Value) {
                         setState(() {
                           _selectedPostalCode = "";
                           _itemPostalCode = [];
-                          _selectedSubDistrict = newValue.toString();
+                          _selectedSubDistrict = Value.toString();
                           getPostalCode();
                         });
                       },
                       items: _itemSubDistrict.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
                             style: const TextStyle(
                               fontSize: 15.00,
@@ -1365,7 +1378,6 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     )
@@ -1392,17 +1404,18 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                           fontFamily: 'Sarabun',
                         ),
                       ),
-                      onChanged: (newValue) {
+                      // ignore: non_constant_identifier_names
+                      onChanged: (Value) {
                         setState(() {
                           _selectedPostalCode = "";
                           _itemPostalCode = [];
-                          _selectedSubDistrict = newValue.toString();
+                          _selectedSubDistrict = Value.toString();
                           getPostalCode();
                         });
                       },
                       items: _itemSubDistrict.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          child: Text(
                             item['title'],
                             style: const TextStyle(
                               fontSize: 15.00,
@@ -1419,7 +1432,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
             ),
             labelTextFormField('* รหัสไปรษณีย์'),
 
-            new Container(
+            Container(
               width: 5000.0,
               padding: const EdgeInsets.symmetric(
                 horizontal: 5,
@@ -1456,14 +1469,14 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                         ),
                       ),
                       value: _selectedPostalCode,
-                      onChanged: (newValue) {
+                      onChanged: (Value) {
                         setState(() {
-                          _selectedPostalCode = newValue.toString();
+                          _selectedPostalCode = Value.toString();
                         });
                       },
                       items: _itemPostalCode.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          child: Text(
                             item['postCode'],
                             style: const TextStyle(
                               fontSize: 15.00,
@@ -1500,14 +1513,14 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                           fontFamily: 'Sarabun',
                         ),
                       ),
-                      onChanged: (newValue) {
+                      onChanged: (Value) {
                         setState(() {
-                          _selectedPostalCode = newValue.toString();
+                          _selectedPostalCode = Value.toString();
                         });
                       },
                       items: _itemPostalCode.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          child: Text(
                             item['postCode'],
                             style: const TextStyle(
                               fontSize: 15.00,
@@ -1543,9 +1556,9 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                         submitUpdateUser();
                       }
                     },
-                    child: new Text(
+                    child: Text(
                       'บันทึกข้อมูล',
-                      style: new TextStyle(
+                      style: TextStyle(
                         fontSize: 18.0,
                         color: Colors.white,
                         fontWeight: FontWeight.normal,
@@ -1568,7 +1581,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
       child: Row(
         children: <Widget>[
           Container(
-            child: new Padding(
+            child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: Image.asset(
                 urlImage,
@@ -1588,7 +1601,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
             margin: const EdgeInsets.only(left: 10.0, right: 10.0),
             child: Text(
               title,
-              style: new TextStyle(
+              style: TextStyle(
                 fontSize: 12.0,
                 color: const Color(0xFF000070),
                 fontWeight: FontWeight.normal,
@@ -1649,11 +1662,11 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
       builder: (BuildContext bc) {
         return SafeArea(
           child: Container(
-            child: new Wrap(
+            child: Wrap(
               children: <Widget>[
-                new ListTile(
-                    leading: new Icon(Icons.photo_library),
-                    title: new Text(
+                ListTile(
+                    leading: Icon(Icons.photo_library),
+                    title: Text(
                       'อัลบั้มรูปภาพ',
                       style: const TextStyle(
                         fontSize: 13,
@@ -1665,9 +1678,9 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                       _imgFromGallery();
                       Navigator.of(context).pop();
                     }),
-                new ListTile(
-                  leading: new Icon(Icons.photo_camera),
-                  title: new Text(
+                ListTile(
+                  leading: Icon(Icons.photo_camera),
+                  title: Text(
                     'กล้องถ่ายรูป',
                     style: const TextStyle(
                       fontSize: 13,

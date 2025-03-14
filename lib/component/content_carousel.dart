@@ -3,7 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:weconnect/component/gallery_view.dart';
 import 'package:weconnect/shared/api_provider.dart';
-// import 'package:share/share.dart';
+
 import 'package:weconnect/shared/extension.dart';
 
 // ignore: must_be_immutable

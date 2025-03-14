@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:weconnect/component/gallery_view.dart';
 import 'package:weconnect/component/link_url_out.dart';
 import 'package:weconnect/shared/api_provider.dart';
-import 'package:share/share.dart';
+
 import 'package:weconnect/shared/extension.dart';
 
 // ignore: must_be_immutable
@@ -223,7 +224,7 @@ class _Content extends State<Content> {
                             if (box != null) {
                               Share.share(
                                 '$_urlShared${widget.pathShare}${model['code']} ${model['title']}',
-                                subject: '${model['title']}',
+                                subject: model['title'],
                                 sharePositionOrigin:
                                     box.localToGlobal(Offset.zero) & box.size,
                               );
