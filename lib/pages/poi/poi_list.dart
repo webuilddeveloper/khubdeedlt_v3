@@ -42,10 +42,12 @@ class _PoiList extends State<PoiList> {
   late Future<dynamic> _futureModel;
   late LatLngBounds initLatLngBounds;
 
-  late double positionScroll;
+  // ให้ initialize ค่านี้เพื่อป้องกัน null error
+  double positionScroll = 0.0;
   bool showMap = true;
+  bool _mapInitialized =
+      false; // เพิ่มตัวแปรเพื่อติดตามว่า map ถูก initialize แล้วหรือไม่
 
-  // Future<dynamic> _futureModel;
   late Future<dynamic> futureCategory;
   List<dynamic> listTemp = [
     {
@@ -70,21 +72,40 @@ class _PoiList extends State<PoiList> {
   @override
   void initState() {
     super.initState();
-    _futureModel = post('${poiApi}read', {
-      'skip': 0,
-      'limit': 10,
-      'latitude': widget.latLng.latitude,
-      'longitude': widget.latLng.longitude
-    });
 
-    setState(() {
-      double southwest = widget.latLng.latitude;
-      double northeast = widget.latLng.longitude;
+    // ป้องกัน error จาก latitude/longitude ที่อาจเป็น null หรือค่าไม่ถูกต้อง
+    try {
+      _futureModel = post('${poiApi}read', {
+        'skip': 0,
+        'limit': 10,
+        'latitude': widget.latLng.latitude,
+        'longitude': widget.latLng.longitude
+      });
+
+      // ปรับปรุงการสร้าง LatLngBounds ให้ถูกต้อง
+      double lat = widget.latLng.latitude;
+      double lng = widget.latLng.longitude;
+
+      // ต้องแน่ใจว่า southwest มีค่าน้อยกว่า northeast เสมอ
+      double southwestLat = lat - 0.2;
+      double southwestLng = lng - 0.15;
+      double northeastLat = lat + 0.1;
+      double northeastLng = lng + 0.1;
 
       initLatLngBounds = LatLngBounds(
-          southwest: LatLng(southwest - 0.2, northeast - 0.15),
-          northeast: LatLng(southwest + 0.1, northeast + 0.1));
-    });
+          southwest: LatLng(southwestLat, southwestLng),
+          northeast: LatLng(northeastLat, northeastLng));
+    } catch (e) {
+      print("Error initializing map data: $e");
+      // กำหนดค่าเริ่มต้นเพื่อป้องกัน crash
+      initLatLngBounds =
+          LatLngBounds(southwest: LatLng(0, 0), northeast: LatLng(1, 1));
+
+      // ถ้าเกิด error ให้แสดงหน้า list แทน map
+      showMap = false;
+
+      _futureModel = Future.value([]);
+    }
 
     futureCategory = postCategory(
       '${poiCategoryApi}read',
@@ -180,47 +201,87 @@ class _PoiList extends State<PoiList> {
     );
   }
 
-  FutureBuilder googleMap(modelData) {
-    List<Marker> _markers = <Marker>[];
-
+  Widget googleMap(Future<dynamic> modelData) {
     return FutureBuilder<dynamic>(
-      future: modelData, // function where you call your api
+      future: modelData,
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            snapshot.data
-                .map(
-                  (item) => _markers.add(
-                    Marker(
-                      markerId: MarkerId(item['code']),
-                      position: LatLng(
-                        double.parse(item['latitude']),
-                        double.parse(item['longitude']),
-                      ),
-                      infoWindow: InfoWindow(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PoiForm(
-                                code: item['code'],
-                                model: item,
-                                urlComment: '',
-                                url: '',
-                                urlGallery: '',
-                              ),
-                            ),
-                          );
-                        },
-                        title: item['title'].toString(),
-                      ),
-                      icon: BitmapDescriptor.defaultMarkerWithHue(
-                        BitmapDescriptor.hueRed,
-                      ),
-                    ),
-                  ),
+        // เพิ่มการจัดการกรณี error และ loading
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          print("Error loading map data: ${snapshot.error}");
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, size: 50, color: Colors.red),
+                SizedBox(height: 10),
+                Text("เกิดข้อผิดพลาดในการโหลดแผนที่",
+                    style: TextStyle(fontFamily: 'Sarabun')),
+                TextButton(
+                  onPressed: () => setState(() {
+                    _futureModel = post('${poiApi}read', {
+                      'skip': 0,
+                      'limit': 10,
+                      'latitude': widget.latLng.latitude,
+                      'longitude': widget.latLng.longitude
+                    });
+                  }),
+                  child:
+                      Text("ลองใหม่", style: TextStyle(fontFamily: 'Sarabun')),
                 )
-                .toList();
+              ],
+            ),
+          );
+        } else if (snapshot.hasData) {
+          List<Marker> _markers = <Marker>[];
+
+          try {
+            if (snapshot.data != null && snapshot.data.length > 0) {
+              for (var item in snapshot.data) {
+                try {
+                  // ใช้ try-catch เพื่อจัดการกรณีที่ข้อมูล lat/lng ไม่ถูกต้อง
+                  double lat = double.parse(item['latitude'] ?? "0.0");
+                  double lng = double.parse(item['longitude'] ?? "0.0");
+
+                  if (lat != 0.0 && lng != 0.0) {
+                    _markers.add(
+                      Marker(
+                        markerId:
+                            MarkerId(item['code'] ?? DateTime.now().toString()),
+                        position: LatLng(lat, lng),
+                        infoWindow: InfoWindow(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PoiForm(
+                                  code: item['code'],
+                                  model: item,
+                                  urlComment: '',
+                                  url: '',
+                                  urlGallery: '',
+                                ),
+                              ),
+                            );
+                          },
+                          title: item['title']?.toString() ?? "",
+                        ),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueRed,
+                        ),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  print("Error creating marker: $e");
+                  // ข้ามไปสร้าง marker ตัวถัดไป
+                  continue;
+                }
+              }
+            }
+          } catch (e) {
+            print("Error processing map data: $e");
           }
 
           return GoogleMap(
@@ -239,52 +300,78 @@ class _PoiList extends State<PoiList> {
               ),
             ].toSet(),
             onMapCreated: (GoogleMapController controller) {
-              controller.moveCamera(
-                CameraUpdate.newLatLngBounds(
-                  initLatLngBounds,
-                  5.0,
-                ),
-              );
-              controller.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(target: widget.latLng, zoom: 15)));
-              _mapController.complete(controller);
-            },
-            // cameraTargetBounds: CameraTargetBounds(_createBounds()),
-            markers: snapshot.data.length > 0
-                ? _markers.toSet()
-                : <Marker>[
-                    Marker(
-                      markerId: MarkerId('1'),
-                      position: LatLng(0.00, 0.00),
-                      icon: BitmapDescriptor.defaultMarkerWithHue(
-                        BitmapDescriptor.hueRed,
+              try {
+                if (!_mapInitialized) {
+                  // ใช้ try-catch เพื่อป้องกัน error จากการเรียกใช้ animation
+                  try {
+                    controller.moveCamera(
+                      CameraUpdate.newLatLngBounds(
+                        initLatLngBounds,
+                        5.0,
                       ),
-                    ),
-                  ].toSet(),
+                    );
+                  } catch (e) {
+                    print("Error moving camera: $e");
+                  }
+
+                  try {
+                    controller.animateCamera(CameraUpdate.newCameraPosition(
+                        CameraPosition(target: widget.latLng, zoom: 15)));
+                  } catch (e) {
+                    print("Error animating camera: $e");
+                  }
+
+                  _mapController.complete(controller);
+                  _mapInitialized = true;
+                }
+              } catch (e) {
+                print("Error initializing map: $e");
+              }
+            },
+            markers: _markers.isNotEmpty
+                ? _markers.toSet()
+                : <Marker>[]
+                    .toSet(), // ไม่ต้องสร้าง default marker ที่ 0,0 ถ้าไม่มีข้อมูล
           );
         } else {
-          return Container();
+          return Center(
+              child: Text("ไม่พบข้อมูลแผนที่",
+                  style: TextStyle(fontFamily: 'Sarabun')));
         }
       },
     );
   }
 
   LatLngBounds _createBounds() {
-    List<LatLng> positions = [];
-    positions.add(widget.latLng);
-    final southwestLat = positions.map((p) => p.latitude).reduce(
-        (value, element) => value < element ? value : element); // smallest
-    final southwestLon = positions
-        .map((p) => p.longitude)
-        .reduce((value, element) => value < element ? value : element);
-    final northeastLat = positions.map((p) => p.latitude).reduce(
-        (value, element) => value > element ? value : element); // biggest
-    final northeastLon = positions
-        .map((p) => p.longitude)
-        .reduce((value, element) => value > element ? value : element);
-    return LatLngBounds(
-        southwest: LatLng(southwestLat, southwestLon),
-        northeast: LatLng(northeastLat, northeastLon));
+    try {
+      List<LatLng> positions = [];
+      positions.add(widget.latLng);
+
+      final southwestLat = positions
+          .map((p) => p.latitude)
+          .reduce((value, element) => value < element ? value : element);
+      final southwestLon = positions
+          .map((p) => p.longitude)
+          .reduce((value, element) => value < element ? value : element);
+      final northeastLat = positions
+          .map((p) => p.latitude)
+          .reduce((value, element) => value > element ? value : element);
+      final northeastLon = positions
+          .map((p) => p.longitude)
+          .reduce((value, element) => value > element ? value : element);
+
+      return LatLngBounds(
+          southwest: LatLng(southwestLat, southwestLon),
+          northeast: LatLng(northeastLat, northeastLon));
+    } catch (e) {
+      print("Error creating bounds: $e");
+      // ส่งคืนค่า default bounds เพื่อป้องกัน crash
+      return LatLngBounds(
+          southwest: LatLng(
+              widget.latLng.latitude - 0.1, widget.latLng.longitude - 0.1),
+          northeast: LatLng(
+              widget.latLng.latitude + 0.1, widget.latLng.longitude + 0.1));
+    }
   }
 
   Widget _panel(ScrollController sc) {
@@ -318,19 +405,6 @@ class _PoiList extends State<PoiList> {
                 ),
                 height: 4,
               ),
-              // child: AnimatedOpacity(
-              //   opacity: positionScroll < 0.9 ? 1.0 : 0.0,
-              //   duration: Duration(milliseconds: 300),
-              //   child: Container(
-              //     margin: EdgeInsets.only(top: 10),
-              //     width: 40,
-              //     decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(5),
-              //       color: Colors.grey,
-              //     ),
-              //     height: 4,
-              //   ),
-              // ),
             ),
             Container(
               height: 35,
@@ -344,12 +418,7 @@ class _PoiList extends State<PoiList> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // child: Icon(
-              //   Icons.arrow_circle_up,
-              //   color: Theme.of(context).primaryColor,
-              // ),
             ),
-            // : Container(),
             const SizedBox(
               height: 5,
             ),
@@ -395,9 +464,11 @@ class _PoiList extends State<PoiList> {
     );
   }
 
+  // ส่วนที่เหลือคงเดิม...
+
   FutureBuilder buildList() {
     return FutureBuilder<dynamic>(
-      future: _futureModel, // function where you call your api
+      future: _futureModel,
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           if (showLoadingItem) {
@@ -421,15 +492,16 @@ class _PoiList extends State<PoiList> {
             );
           } else {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              setState(() {
-                showLoadingItem = false;
-                listTemp = snapshot.data;
-              });
+              if (mounted) {
+                setState(() {
+                  showLoadingItem = false;
+                  listTemp = snapshot.data;
+                });
+              }
             });
             return refreshList(snapshot.data);
           }
         } else if (snapshot.hasError) {
-          // return dialogFail(context);
           return InkWell(
             onTap: () {
               setState(() {
@@ -448,7 +520,7 @@ class _PoiList extends State<PoiList> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.refresh, size: 50.0, color: Colors.blue),
-                Text('ลองใหม่อีกครั้ง')
+                Text('ลองใหม่อีกครั้ง', style: TextStyle(fontFamily: 'Sarabun'))
               ],
             ),
           );
@@ -520,7 +592,6 @@ class _PoiList extends State<PoiList> {
                     ],
                   ),
                   margin: EdgeInsets.only(bottom: 5.0),
-                  // height: 334,
                   width: 600,
                   child: Column(
                     children: [
@@ -566,12 +637,11 @@ class _PoiList extends State<PoiList> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              // color: Colors.red,
                               padding: EdgeInsets.only(left: 8),
                               child: Column(
                                 children: [
                                   Text(
-                                    '${model['title']}',
+                                    '${model['title'] ?? ""}',
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -585,18 +655,17 @@ class _PoiList extends State<PoiList> {
                               ),
                             ),
                             Container(
-                              // color: Colors.red,
                               padding: EdgeInsets.only(left: 8),
                               child: Column(
                                 children: [
                                   Text(
                                     'วันที่ ' +
-                                        dateStringToDate(model['createDate']),
+                                        dateStringToDate(
+                                            model['createDate'] ?? ""),
                                     style: TextStyle(
                                       color: Color(0xFF8F8F8F),
                                       fontFamily: 'Sarabun',
                                       fontSize: 15.0,
-                                      // fontWeight: FontWeight.normal,
                                     ),
                                   ),
                                 ],
@@ -636,5 +705,4 @@ class _PoiList extends State<PoiList> {
       },
     );
   }
-// end show content
 }

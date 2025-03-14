@@ -3,6 +3,10 @@
         android:label="weconnect"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD-pkE26l2sWEU_CrbDz6b2myMe5Ab7jJo"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

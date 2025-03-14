@@ -1,4 +1,4 @@
-package com.example.weconnect
+package td.webuild.khubdeedlt
 
 import io.flutter.embedding.android.FlutterActivity
 

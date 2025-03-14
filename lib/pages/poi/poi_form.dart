@@ -81,7 +81,7 @@ class _PoiForm extends State<PoiForm> {
         child: SmartRefresher(
           enablePullDown: false,
           enablePullUp: true,
-          footer: ClassicFooter(
+          footer: const ClassicFooter(
             loadingText: ' ',
             canLoadingText: ' ',
             idleText: ' ',
