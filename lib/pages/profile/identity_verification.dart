@@ -1,59 +1,54 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:weconnect/home_v2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:weconnect/component/header.dart';
 import 'package:weconnect/pages/blank_page/dialog_fail.dart';
-import 'package:weconnect/home.dart';
 import 'package:weconnect/pages/profile/policy_identity_verification.dart';
 import 'package:weconnect/shared/api_provider.dart';
 import 'package:weconnect/widget/text_form_field.dart';
 
 class IdentityVerificationPage extends StatefulWidget {
+  const IdentityVerificationPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _IdentityVerificationPageState createState() =>
       _IdentityVerificationPageState();
 }
 
 class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
-  final storage = new FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   late String _imageUrl;
-  late String _code;
   late String _username;
 
   final _formKey = GlobalKey<FormState>();
   final _formOrganizationKey = GlobalKey<FormState>();
 
-  List<String> _itemPrefixName = ['นาย', 'นาง', 'นางสาว']; // Option 2
-  late String _selectedPrefixName;
-
-  List<dynamic> _itemSex = [
+// Option 2
+  final List<dynamic> _itemSex = [
     {'title': 'ชาย', 'code': 'ชาย'},
     {'title': 'หญิง', 'code': 'หญิง'},
     {'title': 'ไม่ระบุเพศ', 'code': 'ไม่ระบุเพศ'}
   ];
-  late String _selectedSex;
+  late String _selectedSex = '';
 
   List<dynamic> _itemProvince = [];
-  late String _selectedProvince;
+  late String _selectedProvince = '';
 
   List<dynamic> _itemDistrict = [];
-  late String _selectedDistrict;
+  late String _selectedDistrict = '';
 
   List<dynamic> _itemSubDistrict = [];
-  late String _selectedSubDistrict;
+  late String _selectedSubDistrict = '';
 
   List<dynamic> _itemPostalCode = [];
-  late String _selectedPostalCode;
-
-  List<dynamic> _itemOrganizationLv0 = [];
+  late String _selectedPostalCode = '';
 
   final txtEmail = TextEditingController();
   final txtPassword = TextEditingController();
@@ -74,11 +69,9 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
   DateTime selectedDate = DateTime.now();
   TextEditingController txtDate = TextEditingController();
 
-  late Future<dynamic> futureModel;
+  late Future<dynamic> futureModel = Future.value(null);
 
-  ScrollController scrollController = new ScrollController();
-
-  late File _image;
+  ScrollController scrollController = ScrollController();
 
   int _selectedDay = 0;
   int _selectedMonth = 0;
@@ -128,12 +121,13 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
   @override
   void initState() {
     // readStorage();
+
     getUser();
     // getProvince();
     getOrganizationLv0();
 
     scrollController = ScrollController();
-    var now = new DateTime.now();
+    var now = DateTime.now();
     setState(() {
       year = now.year;
       month = now.month;
@@ -306,10 +300,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
     var profileCode = await storage.read(key: 'profileCode2');
 
     if (profileCode != '') {
-      print('-----$profileCode-----');
+      // print('-----$profileCode-----');
       final result =
           await postObjectData("m/Register/read", {'code': profileCode});
-      print('-----${result.toString()}-----');
+      // print('-----${result.toString()}-----');
       if (result['status'] == 'S') {
         // await storage.write(
         //   key: 'dataUserLoginOPEC',
@@ -333,33 +327,30 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
         }
 
         setState(() {
-          _username = result['objectData'][0]['username'] ?? '';
+          _username = result['objectData'][0]['username'];
           dataCountUnit = result['objectData'][0]['countUnit'] != null
               ? json.decode(result['objectData'][0]['countUnit'])
               : [];
-          _imageUrl = result['objectData'][0]['imageUrl'] ?? '';
-          txtFirstName.text = result['objectData'][0]['firstName'] ?? '';
-          txtLastName.text = result['objectData'][0]['lastName'] ?? '';
-          txtEmail.text = result['objectData'][0]['email'] ?? '';
-          txtPhone.text = result['objectData'][0]['phone'] ?? '';
-          _selectedPrefixName = result['objectData'][0]['prefixName'];
-          _code = result['objectData'][0]['code'] ?? '';
-          txtPhone.text = result['objectData'][0]['phone'] ?? '';
-          txtUsername.text = result['objectData'][0]['username'] ?? '';
-          txtIdCard.text = result['objectData'][0]['idcard'] ?? '';
-          txtLineID.text = result['objectData'][0]['lineID'] ?? '';
-          txtOfficerCode.text = result['objectData'][0]['officerCode'] ?? '';
-          txtAddress.text = result['objectData'][0]['address'] ?? '';
-          txtMoo.text = result['objectData'][0]['moo'] ?? '';
-          txtSoi.text = result['objectData'][0]['soi'] ?? '';
-          txtRoad.text = result['objectData'][0]['road'] ?? '';
-          txtPrefixName.text = result['objectData'][0]['prefixName'] ?? '';
+          _imageUrl = result['objectData'][0]['imageUrl'];
+          txtFirstName.text = result['objectData'][0]['firstName'];
+          txtLastName.text = result['objectData'][0]['lastName'];
+          txtEmail.text = result['objectData'][0]['email'];
+          txtPhone.text = result['objectData'][0]['phone'];
+          txtPhone.text = result['objectData'][0]['phone'];
+          txtIdCard.text = result['objectData'][0]['idcard'];
+          txtLineID.text = result['objectData'][0]['lineID'];
+          txtOfficerCode.text = result['objectData'][0]['officerCode'];
+          txtAddress.text = result['objectData'][0]['address'];
+          txtMoo.text = result['objectData'][0]['moo'];
+          txtSoi.text = result['objectData'][0]['soi'];
+          txtRoad.text = result['objectData'][0]['road'];
+          txtPrefixName.text = result['objectData'][0]['prefixName'];
 
-          _selectedProvince = result['objectData'][0]['provinceCode'] ?? '';
-          _selectedDistrict = result['objectData'][0]['amphoeCode'] ?? '';
-          _selectedSubDistrict = result['objectData'][0]['tambonCode'] ?? '';
-          _selectedPostalCode = result['objectData'][0]['postnoCode'] ?? '';
-          _selectedSex = result['objectData'][0]['sex'] ?? '';
+          _selectedProvince = result['objectData'][0]['provinceCode'];
+          _selectedDistrict = result['objectData'][0]['amphoeCode'];
+          _selectedSubDistrict = result['objectData'][0]['tambonCode'];
+          _selectedPostalCode = result['objectData'][0]['postnoCode'];
+          _selectedSex = result['objectData'][0]['sex'];
         });
       }
       if (_selectedProvince != '') {
@@ -380,7 +371,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
   }
 
   Future<dynamic> submitAddOrganization() async {
-    if (dataCountUnit.length > 0) {
+    if (dataCountUnit.isNotEmpty) {
       var index = dataCountUnit.indexWhere(
         (c) =>
             c['lv0'] == _selectedLv0 &&
@@ -392,22 +383,22 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
       );
       if (index == -1) {
         dataCountUnit.add({
-          "lv0": _selectedLv0 ?? '',
-          "titleLv0": _selectedTitleLv0 ?? '',
-          "lv1": _selectedLv1 ?? '',
-          "titleLv1": _selectedTitleLv1 ?? '',
-          "lv2": _selectedLv2 ?? '',
-          "titleLv2": _selectedTitleLv2 ?? '',
-          "lv3": _selectedLv3 ?? '',
-          "titleLv3": _selectedTitleLv3 ?? '',
-          "lv4": _selectedLv4 ?? '',
-          "titleLv4": _selectedTitleLv4 ?? '',
-          "lv5": _selectedLv5 ?? '',
-          "titleLv5": _selectedTitleLv5 ?? '',
+          "lv0": _selectedLv0,
+          "titleLv0": _selectedTitleLv0,
+          "lv1": _selectedLv1,
+          "titleLv1": _selectedTitleLv1,
+          "lv2": _selectedLv2,
+          "titleLv2": _selectedTitleLv2,
+          "lv3": _selectedLv3,
+          "titleLv3": _selectedTitleLv3,
+          "lv4": _selectedLv4,
+          "titleLv4": _selectedTitleLv4,
+          "lv5": _selectedLv5,
+          "titleLv5": _selectedTitleLv5,
           "status": "V",
         });
 
-        this.setState(() {
+        setState(() {
           dataCountUnit = dataCountUnit;
           _selectedLv0 = "";
           _selectedTitleLv0 = "";
@@ -427,8 +418,8 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
       } else {
         return showDialog(
           context: context,
-          builder: (BuildContext context) => new CupertinoAlertDialog(
-            title: new Text(
+          builder: (BuildContext context) => CupertinoAlertDialog(
+            title: const Text(
               'ข้อมูลซ้ำ กรุณาเลือกใหม่',
               style: TextStyle(
                 fontSize: 16,
@@ -437,11 +428,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                 fontWeight: FontWeight.normal,
               ),
             ),
-            content: Text(''),
+            content: const Text(''),
             actions: [
               CupertinoDialogAction(
                 isDefaultAction: true,
-                child: new Text(
+                child: const Text(
                   "ตกลง",
                   style: TextStyle(
                     fontSize: 13,
@@ -460,22 +451,22 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
       }
     } else {
       dataCountUnit.add({
-        "lv0": _selectedLv0 ?? '',
-        "titleLv0": _selectedTitleLv0 ?? '',
-        "lv1": _selectedLv1 ?? '',
-        "titleLv1": _selectedTitleLv1 ?? '',
-        "lv2": _selectedLv2 ?? '',
-        "titleLv2": _selectedTitleLv2 ?? '',
-        "lv3": _selectedLv3 ?? '',
-        "titleLv3": _selectedTitleLv3 ?? '',
-        "lv4": _selectedLv4 ?? '',
-        "titleLv4": _selectedTitleLv4 ?? '',
-        "lv5": _selectedLv5 ?? '',
-        "titleLv5": _selectedTitleLv5 ?? '',
+        "lv0": _selectedLv0,
+        "titleLv0": _selectedTitleLv0,
+        "lv1": _selectedLv1,
+        "titleLv1": _selectedTitleLv1,
+        "lv2": _selectedLv2,
+        "titleLv2": _selectedTitleLv2,
+        "lv3": _selectedLv3,
+        "titleLv3": _selectedTitleLv3,
+        "lv4": _selectedLv4,
+        "titleLv4": _selectedTitleLv4,
+        "lv5": _selectedLv5,
+        "titleLv5": _selectedTitleLv5,
         "status": "V",
       });
 
-      this.setState(() {
+      setState(() {
         dataCountUnit = dataCountUnit;
         _selectedLv0 = "";
         _selectedTitleLv0 = "";
@@ -496,11 +487,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
   }
 
   Future<dynamic> submitUpdateUser() async {
-    if (dataCountUnit.length == 0) {
+    if (dataCountUnit.isEmpty) {
       return showDialog(
         context: context,
-        builder: (BuildContext context) => new CupertinoAlertDialog(
-          title: new Text(
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: const Text(
             'กรุณาเพิ่มหน่วยงานอย่างน้อย 1 หน่วยงาน',
             style: TextStyle(
               fontSize: 16,
@@ -509,11 +500,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
               fontWeight: FontWeight.normal,
             ),
           ),
-          content: Text(''),
+          content: const Text(''),
           actions: [
             CupertinoDialogAction(
               isDefaultAction: true,
-              child: new Text(
+              child: const Text(
                 "ตกลง",
                 style: TextStyle(
                   fontSize: 13,
@@ -539,37 +530,43 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
 
       // var dataRow = dataCountUnit;
       for (var i in dataCountUnit) {
-        if (codeLv0 != "" && codeLv0 != null) {
-          codeLv0 = codeLv0 + "," + i['lv0'];
+        if (codeLv0 != "") {
+          // ignore: prefer_interpolation_to_compose_strings
+          codeLv0 = "$codeLv0," + i['lv0'];
         } else {
           codeLv0 = i['lv0'];
         }
 
-        if (codeLv1 != "" && codeLv1 != null) {
-          codeLv1 = codeLv1 + "," + i['lv1'];
+        if (codeLv1 != "") {
+          // ignore: prefer_interpolation_to_compose_strings
+          codeLv1 = "$codeLv1," + i['lv1'];
         } else {
           codeLv1 = i['lv1'];
         }
 
-        if (codeLv2 != "" && codeLv2 != null) {
-          codeLv2 = codeLv2 + "," + i['lv2'];
+        if (codeLv2 != "") {
+          // ignore: prefer_interpolation_to_compose_strings
+          codeLv2 = "$codeLv2," + i['lv2'];
         } else {
           codeLv2 = i['lv2'];
         }
 
-        if (codeLv3 != "" && codeLv3 != null) {
-          codeLv3 = codeLv3 + "," + i['lv3'];
+        if (codeLv3 != "") {
+          // ignore: prefer_interpolation_to_compose_strings
+          codeLv3 = "$codeLv3," + i['lv3'];
         } else {
           codeLv3 = i['lv3'];
         }
 
-        if (codeLv4 != "" && codeLv4 != null) {
-          codeLv4 = codeLv4 + "," + i['lv4'];
+        if (codeLv4 != "") {
+          // ignore: prefer_interpolation_to_compose_strings
+          codeLv4 = "$codeLv4," + i['lv4'];
         } else {
           codeLv4 = i['lv4'];
         }
-        if (codeLv5 != "" && codeLv5 != null) {
-          codeLv5 = codeLv4 + "," + i['lv4'];
+        if (codeLv5 != "") {
+          // ignore: prefer_interpolation_to_compose_strings
+          codeLv5 = "$codeLv4," + i['lv4'];
         } else {
           codeLv5 = i['lv4'];
         }
@@ -579,13 +576,13 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
 
       var value = await storage.read(key: 'dataUserLoginOPEC');
       var user = json.decode(value!);
-      user['imageUrl'] = _imageUrl ?? '';
-      // user['prefixName'] = _selectedPrefixName ?? '';
-      user['prefixName'] = txtPrefixName.text ?? '';
-      user['firstName'] = txtFirstName.text ?? '';
-      user['lastName'] = txtLastName.text ?? '';
-      user['email'] = txtEmail.text ?? '';
-      user['phone'] = txtPhone.text ?? '';
+      user['imageUrl'] = _imageUrl;
+      // user['prefixName'] = _selectedPrefixName ;
+      user['prefixName'] = txtPrefixName.text;
+      user['firstName'] = txtFirstName.text;
+      user['lastName'] = txtLastName.text;
+      user['email'] = txtEmail.text;
+      user['phone'] = txtPhone.text;
 
       user['birthDay'] = DateFormat("yyyyMMdd").format(
         DateTime(
@@ -594,23 +591,22 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
           _selectedDay,
         ),
       );
-      user['sex'] = _selectedSex ?? '';
-      user['address'] = txtAddress.text ?? '';
-      user['soi'] = txtSoi.text ?? '';
-      user['moo'] = txtMoo.text ?? '';
-      user['road'] = txtRoad.text ?? '';
+      user['sex'] = _selectedSex;
+      user['address'] = txtAddress.text;
+      user['soi'] = txtSoi.text;
+      user['moo'] = txtMoo.text;
+      user['road'] = txtRoad.text;
       user['tambon'] = '';
       user['amphoe'] = '';
       user['province'] = '';
       user['postno'] = '';
-      user['tambonCode'] = _selectedSubDistrict ?? '';
-      user['amphoeCode'] = _selectedDistrict ?? '';
-      user['provinceCode'] = _selectedProvince ?? '';
-      user['postnoCode'] = _selectedPostalCode ?? '';
-      user['idcard'] = txtIdCard.text ?? '';
-      user['officerCode'] = txtOfficerCode.text ?? '';
-      user['linkAccount'] =
-          user['linkAccount'] != null ? user['linkAccount'] : '';
+      user['tambonCode'] = _selectedSubDistrict;
+      user['amphoeCode'] = _selectedDistrict;
+      user['provinceCode'] = _selectedProvince;
+      user['postnoCode'] = _selectedPostalCode;
+      user['idcard'] = txtIdCard.text;
+      user['officerCode'] = txtOfficerCode.text;
+      user['linkAccount'] = user['linkAccount'] ?? '';
       user['countUnit'] = json.encode(dataCountUnit);
       user['lv0'] = codeLv0;
       user['lv1'] = codeLv1;
@@ -620,7 +616,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
       user['lv5'] = codeLv5;
       // user['status'] = "V";
       user['status'] = index == -1 ? user['status'] : "V";
-      user['appleID'] = user['appleID'] != null ? user['appleID'] : "";
+      user['appleID'] = user['appleID'] ?? "";
 
       final result = await postObjectData('m/v2/Register/verify/update', user);
 
@@ -637,8 +633,9 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
         //   );
         // }
 
-        if (dataPolicy.length > 0) {
+        if (dataPolicy.isNotEmpty) {
           Navigator.pushReplacement(
+            // ignore: use_build_context_synchronously
             context,
             MaterialPageRoute(
               builder: (context) =>
@@ -648,14 +645,16 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
         } else {
           return showDialog(
             barrierDismissible: false,
+            // ignore: use_build_context_synchronously
             context: context,
             builder: (BuildContext context) {
+              // ignore: deprecated_member_use
               return WillPopScope(
                 onWillPop: () {
                   return Future.value(false);
                 },
                 child: CupertinoAlertDialog(
-                  title: new Text(
+                  title: const Text(
                     'ยืนยันตัวตนเรียบร้อยแล้ว',
                     style: TextStyle(
                       fontSize: 16,
@@ -664,11 +663,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       fontWeight: FontWeight.normal,
                     ),
                   ),
-                  content: Text(" "),
+                  content: const Text(" "),
                   actions: [
                     CupertinoDialogAction(
                       isDefaultAction: true,
-                      child: new Text(
+                      child: const Text(
                         "ตกลง",
                         style: TextStyle(
                           fontSize: 13,
@@ -695,9 +694,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
         }
       } else {
         return showDialog(
+          // ignore: use_build_context_synchronously
           context: context,
-          builder: (BuildContext context) => new CupertinoAlertDialog(
-            title: new Text(
+          builder: (BuildContext context) => CupertinoAlertDialog(
+            title: const Text(
               'ยืนยันตัวตนไม่สำเร็จ',
               style: TextStyle(
                 fontSize: 16,
@@ -708,7 +708,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
             ),
             content: Text(
               result['message'],
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 13,
                 fontFamily: 'Sarabun',
                 color: Colors.black,
@@ -718,7 +718,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
             actions: [
               CupertinoDialogAction(
                 isDefaultAction: true,
-                child: new Text(
+                child: const Text(
                   "ตกลง",
                   style: TextStyle(
                     fontSize: 13,
@@ -729,7 +729,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                 ),
                 onPressed: () {
                   FocusScope.of(context).unfocus();
-                  new TextEditingController().clear();
+                  TextEditingController().clear();
                   Navigator.of(context).pop();
                 },
               ),
@@ -746,14 +746,13 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
 
     if (user['code'] != '') {
       setState(() {
-        _imageUrl = user['imageUrl'] ?? '';
-        txtFirstName.text = user['firstName'] ?? '';
-        txtLastName.text = user['lastName'] ?? '';
-        txtEmail.text = user['email'] ?? '';
-        txtPhone.text = user['phone'] ?? '';
-        txtPrefixName.text = user['prefixName'] ?? '';
+        _imageUrl = user['imageUrl'];
+        txtFirstName.text = user['firstName'];
+        txtLastName.text = user['lastName'];
+        txtEmail.text = user['email'];
+        txtPhone.text = user['phone'];
+        txtPrefixName.text = user['prefixName'];
         // _selectedPrefixName = user['prefixName'];
-        _code = user['code'];
       });
 
       if (user['birthDay'] != '') {
@@ -782,13 +781,13 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
         borderRadius: BorderRadius.circular(15.0),
       ),
       elevation: 5,
-      child: Padding(padding: EdgeInsets.all(15), child: contentCard()),
+      child: Padding(padding: const EdgeInsets.all(15), child: contentCard()),
     );
   }
 
   dialogOpenPickerDate() {
     picker.DatePicker.showDatePicker(context,
-        theme: picker.DatePickerTheme(
+        theme: const picker.DatePickerTheme(
           containerHeight: 210.0,
           itemStyle: TextStyle(
             fontSize: 16.0,
@@ -839,9 +838,9 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
         child: ListView(
           controller: scrollController,
           shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           children: <Widget>[
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(top: 5.0),
             ),
 
@@ -849,19 +848,32 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
               children: <Widget>[
                 for (var i = 0; i < dataCountUnit.length; i++)
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 5.0),
+                    margin: const EdgeInsets.symmetric(vertical: 5.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(
+                            0xFF9A1120,
+                          ),
+                          spreadRadius: 1,
+                        ),
+                      ],
+                      // border: Border.all(color: Colors.white.withAlpha(50)),
+                    ),
                     child: Row(
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width * 0.8,
-                          padding: EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 dataCountUnit[i]['titleLv0'].toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 13.00,
                                   fontFamily: 'Sarabun',
                                   color: Color(
@@ -872,7 +884,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                               ),
                               Text(
                                 dataCountUnit[i]['titleLv1'].toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 13.00,
                                   fontFamily: 'Sarabun',
                                   color: Color(
@@ -885,7 +897,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                       dataCountUnit[i]['titleLv2'] != null
                                   ? Text(
                                       dataCountUnit[i]['titleLv2'].toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 13.00,
                                         fontFamily: 'Sarabun',
                                         color: Color(
@@ -899,7 +911,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                       dataCountUnit[i]['titleLv3'] != null
                                   ? Text(
                                       dataCountUnit[i]['titleLv3'].toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 13.00,
                                         fontFamily: 'Sarabun',
                                         color: Color(
@@ -913,7 +925,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                       dataCountUnit[i]['titleLv4'] != null
                                   ? Text(
                                       dataCountUnit[i]['titleLv4'].toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 13.00,
                                         fontFamily: 'Sarabun',
                                         color: Color(
@@ -927,7 +939,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                       dataCountUnit[i]['titleLv5'] != null
                                   ? Text(
                                       dataCountUnit[i]['titleLv5'].toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 13.00,
                                         fontFamily: 'Sarabun',
                                         color: Color(
@@ -940,7 +952,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                             ],
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.1,
                           child: TextButton(
                             onPressed: () => {
@@ -948,7 +960,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                 dataCountUnit.removeAt(i);
                               })
                             },
-                            child: Column(
+                            child: const Column(
                               children: [
                                 Icon(Icons.close),
                               ],
@@ -956,19 +968,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                           ),
                         ),
                       ],
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(
-                            0xFF9A1120,
-                          ),
-                          spreadRadius: 1,
-                        ),
-                      ],
-                      // border: Border.all(color: Colors.white.withAlpha(50)),
                     ),
                   ),
               ],
@@ -979,7 +978,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                         color: Color(
                           0xFF9A1120,
@@ -995,23 +994,23 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                     child: ListView(
                       controller: scrollController,
                       shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
+                      physics: const ClampingScrollPhysics(),
                       children: <Widget>[
-                        new Container(
+                        Container(
                           width: 5000.0,
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             horizontal: 5,
                             vertical: 0,
                           ),
                           decoration: BoxDecoration(
-                            color: Color(0xFFEEBA33),
+                            color: const Color(0xFFEEBA33),
                             borderRadius: BorderRadius.circular(
                               10,
                             ),
                           ),
                           child: (_selectedLv0 != '')
                               ? DropdownButtonFormField(
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     errorStyle: TextStyle(
                                       fontWeight: FontWeight.normal,
                                       fontFamily: 'Sarabun',
@@ -1027,7 +1026,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                       value == '' || value == null
                                           ? 'โปรดระบุ'
                                           : null,
-                                  hint: Text(
+                                  hint: const Text(
                                     'โปรดระบุ',
                                     style: TextStyle(
                                       fontSize: 15.00,
@@ -1037,7 +1036,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                   value: _selectedLv0,
                                   onTap: () {
                                     FocusScope.of(context).unfocus();
-                                    new TextEditingController().clear();
+                                    TextEditingController().clear();
                                   },
                                   onChanged: (newValue) {
                                     var checkValue = _itemLv0.indexWhere(
@@ -1064,9 +1063,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                   },
                                   items: _itemLv0.map((item) {
                                     return DropdownMenuItem(
-                                      child: new Text(
+                                      value: item['code'],
+                                      child: Text(
                                         item['title'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 15.00,
                                           fontFamily: 'Sarabun',
                                           color: Color(
@@ -1074,12 +1074,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                           ),
                                         ),
                                       ),
-                                      value: item['code'],
                                     );
                                   }).toList(),
                                 )
                               : DropdownButtonFormField(
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     errorStyle: TextStyle(
                                       fontWeight: FontWeight.normal,
                                       fontFamily: 'Sarabun',
@@ -1095,7 +1094,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                       value == '' || value == null
                                           ? 'โปรดระบุ'
                                           : null,
-                                  hint: Text(
+                                  hint: const Text(
                                     'โปรดระบุ',
                                     style: TextStyle(
                                       fontSize: 15.00,
@@ -1104,7 +1103,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                   ),
                                   onTap: () {
                                     FocusScope.of(context).unfocus();
-                                    new TextEditingController().clear();
+                                    TextEditingController().clear();
                                   },
                                   onChanged: (newValue) {
                                     var checkValue = _itemLv0.indexWhere(
@@ -1131,9 +1130,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                   },
                                   items: _itemLv0.map((item) {
                                     return DropdownMenuItem(
-                                      child: new Text(
+                                      value: item['code'],
+                                      child: Text(
                                         item['title'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 15.00,
                                           fontFamily: 'Sarabun',
                                           color: Color(
@@ -1141,31 +1141,30 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                           ),
                                         ),
                                       ),
-                                      value: item['code'],
                                     );
                                   }).toList(),
                                 ),
                         ),
                         if (totalLv >= 1)
-                          SizedBox(
+                          const SizedBox(
                             height: 5.0,
                           ),
                         if (totalLv >= 1)
-                          new Container(
+                          Container(
                             width: 5000.0,
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: 5,
                               vertical: 0,
                             ),
                             decoration: BoxDecoration(
-                              color: Color(0xFFEEBA33),
+                              color: const Color(0xFFEEBA33),
                               borderRadius: BorderRadius.circular(
                                 10,
                               ),
                             ),
                             child: (_selectedLv1 != '')
                                 ? DropdownButtonFormField(
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       errorStyle: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Sarabun',
@@ -1181,7 +1180,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         value == '' || value == null
                                             ? 'โปรดระบุ'
                                             : null,
-                                    hint: Text(
+                                    hint: const Text(
                                       'โปรดระบุ',
                                       style: TextStyle(
                                         fontSize: 15.00,
@@ -1191,7 +1190,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     value: _selectedLv1,
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
-                                      new TextEditingController().clear();
+                                      TextEditingController().clear();
                                     },
                                     onChanged: (newValue) {
                                       var checkValue = _itemLv1.indexWhere(
@@ -1208,7 +1207,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         _selectedLv5 = "";
                                         _itemLv5 = [];
                                         _selectedLv1 = newValue as String;
-                                        ;
                                         _selectedTitleLv1 =
                                             _itemLv1[checkValue]['title'];
                                       });
@@ -1217,9 +1215,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     },
                                     items: _itemLv1.map((item) {
                                       return DropdownMenuItem(
-                                        child: new Text(
+                                        value: item['code'],
+                                        child: Text(
                                           item['title'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 15.00,
                                             fontFamily: 'Sarabun',
                                             color: Color(
@@ -1227,12 +1226,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                             ),
                                           ),
                                         ),
-                                        value: item['code'],
                                       );
                                     }).toList(),
                                   )
                                 : DropdownButtonFormField(
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       errorStyle: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Sarabun',
@@ -1248,7 +1246,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         value == '' || value == null
                                             ? 'โปรดระบุ'
                                             : null,
-                                    hint: Text(
+                                    hint: const Text(
                                       'โปรดระบุ',
                                       style: TextStyle(
                                         fontSize: 15.00,
@@ -1257,7 +1255,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     ),
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
-                                      new TextEditingController().clear();
+                                      TextEditingController().clear();
                                     },
                                     onChanged: (newValue) {
                                       var checkValue = _itemLv1.indexWhere(
@@ -1274,7 +1272,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         _selectedLv5 = "";
                                         _itemLv5 = [];
                                         _selectedLv1 = newValue as String;
-                                        ;
                                         _selectedTitleLv1 =
                                             _itemLv1[checkValue]['title'];
                                       });
@@ -1283,9 +1280,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     },
                                     items: _itemLv1.map((item) {
                                       return DropdownMenuItem(
-                                        child: new Text(
+                                        value: item['code'],
+                                        child: Text(
                                           item['title'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 15.00,
                                             fontFamily: 'Sarabun',
                                             color: Color(
@@ -1293,31 +1291,30 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                             ),
                                           ),
                                         ),
-                                        value: item['code'],
                                       );
                                     }).toList(),
                                   ),
                           ),
                         if (totalLv >= 2)
-                          SizedBox(
+                          const SizedBox(
                             height: 5.0,
                           ),
                         if (totalLv >= 2)
-                          new Container(
+                          Container(
                             width: 5000.0,
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: 5,
                               vertical: 0,
                             ),
                             decoration: BoxDecoration(
-                              color: Color(0xFFEEBA33),
+                              color: const Color(0xFFEEBA33),
                               borderRadius: BorderRadius.circular(
                                 10,
                               ),
                             ),
                             child: (_selectedLv2 != '')
                                 ? DropdownButtonFormField(
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       errorStyle: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Sarabun',
@@ -1333,7 +1330,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         value == '' || value == null
                                             ? 'โปรดระบุ'
                                             : null,
-                                    hint: Text(
+                                    hint: const Text(
                                       'โปรดระบุ',
                                       style: TextStyle(
                                         fontSize: 15.00,
@@ -1343,7 +1340,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     value: _selectedLv2,
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
-                                      new TextEditingController().clear();
+                                      TextEditingController().clear();
                                     },
                                     onChanged: (newValue) {
                                       var checkValue = _itemLv2.indexWhere(
@@ -1358,7 +1355,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         _selectedLv5 = "";
                                         _itemLv5 = [];
                                         _selectedLv2 = newValue as String;
-                                        ;
                                         _selectedTitleLv2 =
                                             _itemLv2[checkValue]['title'];
                                       });
@@ -1367,9 +1363,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     },
                                     items: _itemLv2.map((item) {
                                       return DropdownMenuItem(
-                                        child: new Text(
+                                        value: item['code'],
+                                        child: Text(
                                           item['title'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 15.00,
                                             fontFamily: 'Sarabun',
                                             color: Color(
@@ -1377,12 +1374,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                             ),
                                           ),
                                         ),
-                                        value: item['code'],
                                       );
                                     }).toList(),
                                   )
                                 : DropdownButtonFormField(
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       errorStyle: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Sarabun',
@@ -1398,7 +1394,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         value == '' || value == null
                                             ? 'โปรดระบุ'
                                             : null,
-                                    hint: Text(
+                                    hint: const Text(
                                       'โปรดระบุ',
                                       style: TextStyle(
                                         fontSize: 15.00,
@@ -1407,7 +1403,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     ),
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
-                                      new TextEditingController().clear();
+                                      TextEditingController().clear();
                                     },
                                     onChanged: (newValue) {
                                       var checkValue = _itemLv2.indexWhere(
@@ -1422,7 +1418,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         _selectedLv5 = "";
                                         _itemLv5 = [];
                                         _selectedLv2 = newValue as String;
-                                        ;
                                         _selectedTitleLv2 =
                                             _itemLv2[checkValue]['title'];
                                       });
@@ -1431,9 +1426,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     },
                                     items: _itemLv2.map((item) {
                                       return DropdownMenuItem(
-                                        child: new Text(
+                                        value: item['code'],
+                                        child: Text(
                                           item['title'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 15.00,
                                             fontFamily: 'Sarabun',
                                             color: Color(
@@ -1441,31 +1437,30 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                             ),
                                           ),
                                         ),
-                                        value: item['code'],
                                       );
                                     }).toList(),
                                   ),
                           ),
                         if (totalLv >= 3)
-                          SizedBox(
+                          const SizedBox(
                             height: 5.0,
                           ),
                         if (totalLv >= 3)
-                          new Container(
+                          Container(
                             width: 5000.0,
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: 5,
                               vertical: 0,
                             ),
                             decoration: BoxDecoration(
-                              color: Color(0xFFEEBA33),
+                              color: const Color(0xFFEEBA33),
                               borderRadius: BorderRadius.circular(
                                 10,
                               ),
                             ),
                             child: (_selectedLv3 != '')
                                 ? DropdownButtonFormField(
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       errorStyle: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Sarabun',
@@ -1481,7 +1476,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         value == '' || value == null
                                             ? 'โปรดระบุ'
                                             : null,
-                                    hint: Text(
+                                    hint: const Text(
                                       'โปรดระบุ',
                                       style: TextStyle(
                                         fontSize: 15.00,
@@ -1491,7 +1486,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     value: _selectedLv3,
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
-                                      new TextEditingController().clear();
+                                      TextEditingController().clear();
                                     },
                                     onChanged: (newValue) {
                                       var checkValue = _itemLv3.indexWhere(
@@ -1504,7 +1499,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         _selectedLv5 = "";
                                         _itemLv5 = [];
                                         _selectedLv3 = newValue as String;
-                                        ;
                                         _selectedTitleLv3 =
                                             _itemLv3[checkValue]['title'];
                                       });
@@ -1513,9 +1507,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     },
                                     items: _itemLv3.map((item) {
                                       return DropdownMenuItem(
-                                        child: new Text(
+                                        value: item['code'],
+                                        child: Text(
                                           item['title'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 15.00,
                                             fontFamily: 'Sarabun',
                                             color: Color(
@@ -1523,12 +1518,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                             ),
                                           ),
                                         ),
-                                        value: item['code'],
                                       );
                                     }).toList(),
                                   )
                                 : DropdownButtonFormField(
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       errorStyle: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Sarabun',
@@ -1544,7 +1538,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         value == '' || value == null
                                             ? 'โปรดระบุ'
                                             : null,
-                                    hint: Text(
+                                    hint: const Text(
                                       'โปรดระบุ',
                                       style: TextStyle(
                                         fontSize: 15.00,
@@ -1553,7 +1547,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     ),
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
-                                      new TextEditingController().clear();
+                                      TextEditingController().clear();
                                     },
                                     onChanged: (newValue) {
                                       var checkValue = _itemLv3.indexWhere(
@@ -1566,7 +1560,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         _selectedLv5 = "";
                                         _itemLv5 = [];
                                         _selectedLv3 = newValue as String;
-                                        ;
                                         _selectedTitleLv3 =
                                             _itemLv3[checkValue]['title'];
                                       });
@@ -1575,9 +1568,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     },
                                     items: _itemLv3.map((item) {
                                       return DropdownMenuItem(
-                                        child: new Text(
+                                        value: item['code'],
+                                        child: Text(
                                           item['title'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 15.00,
                                             fontFamily: 'Sarabun',
                                             color: Color(
@@ -1585,31 +1579,30 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                             ),
                                           ),
                                         ),
-                                        value: item['code'],
                                       );
                                     }).toList(),
                                   ),
                           ),
                         if (totalLv >= 4)
-                          SizedBox(
+                          const SizedBox(
                             height: 5.0,
                           ),
                         if (totalLv >= 4)
-                          new Container(
+                          Container(
                             width: 5000.0,
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: 5,
                               vertical: 0,
                             ),
                             decoration: BoxDecoration(
-                              color: Color(0xFFEEBA33),
+                              color: const Color(0xFFEEBA33),
                               borderRadius: BorderRadius.circular(
                                 10,
                               ),
                             ),
                             child: (_selectedLv4 != '')
                                 ? DropdownButtonFormField(
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       errorStyle: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Sarabun',
@@ -1625,7 +1618,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         value == '' || value == null
                                             ? 'โปรดระบุ'
                                             : null,
-                                    hint: Text(
+                                    hint: const Text(
                                       'โปรดระบุ',
                                       style: TextStyle(
                                         fontSize: 15.00,
@@ -1635,7 +1628,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     value: _selectedLv4,
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
-                                      new TextEditingController().clear();
+                                      TextEditingController().clear();
                                     },
                                     onChanged: (newValue) {
                                       var checkValue = _itemLv4.indexWhere(
@@ -1646,7 +1639,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         _selectedLv5 = "";
                                         _itemLv5 = [];
                                         _selectedLv4 = newValue as String;
-                                        ;
                                         _selectedTitleLv4 =
                                             _itemLv4[checkValue]['title'];
                                       });
@@ -1655,9 +1647,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     },
                                     items: _itemLv4.map((item) {
                                       return DropdownMenuItem(
-                                        child: new Text(
+                                        value: item['code'],
+                                        child: Text(
                                           item['title'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 15.00,
                                             fontFamily: 'Sarabun',
                                             color: Color(
@@ -1665,12 +1658,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                             ),
                                           ),
                                         ),
-                                        value: item['code'],
                                       );
                                     }).toList(),
                                   )
                                 : DropdownButtonFormField(
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       errorStyle: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Sarabun',
@@ -1686,7 +1678,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         value == '' || value == null
                                             ? 'โปรดระบุ'
                                             : null,
-                                    hint: Text(
+                                    hint: const Text(
                                       'โปรดระบุ',
                                       style: TextStyle(
                                         fontSize: 15.00,
@@ -1695,7 +1687,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     ),
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
-                                      new TextEditingController().clear();
+                                      TextEditingController().clear();
                                     },
                                     onChanged: (newValue) {
                                       var checkValue = _itemLv4.indexWhere(
@@ -1706,7 +1698,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         _selectedLv5 = "";
                                         _itemLv5 = [];
                                         _selectedLv4 = newValue as String;
-                                        ;
                                         _selectedTitleLv4 =
                                             _itemLv4[checkValue]['title'];
                                       });
@@ -1715,9 +1706,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     },
                                     items: _itemLv4.map((item) {
                                       return DropdownMenuItem(
-                                        child: new Text(
+                                        value: item['code'],
+                                        child: Text(
                                           item['title'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 15.00,
                                             fontFamily: 'Sarabun',
                                             color: Color(
@@ -1725,31 +1717,30 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                             ),
                                           ),
                                         ),
-                                        value: item['code'],
                                       );
                                     }).toList(),
                                   ),
                           ),
                         if (totalLv >= 5)
-                          SizedBox(
+                          const SizedBox(
                             height: 5.0,
                           ),
                         if (totalLv >= 5)
-                          new Container(
+                          Container(
                             width: 5000.0,
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: 5,
                               vertical: 0,
                             ),
                             decoration: BoxDecoration(
-                              color: Color(0xFFEEBA33),
+                              color: const Color(0xFFEEBA33),
                               borderRadius: BorderRadius.circular(
                                 10,
                               ),
                             ),
                             child: (_selectedLv5 != '')
                                 ? DropdownButtonFormField(
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       errorStyle: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Sarabun',
@@ -1765,7 +1756,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         value == '' || value == null
                                             ? 'โปรดระบุ'
                                             : null,
-                                    hint: Text(
+                                    hint: const Text(
                                       'โปรดระบุ',
                                       style: TextStyle(
                                         fontSize: 15.00,
@@ -1775,7 +1766,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     value: _selectedLv5,
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
-                                      new TextEditingController().clear();
+                                      TextEditingController().clear();
                                     },
                                     onChanged: (newValue) {
                                       var checkValue = _itemLv5.indexWhere(
@@ -1784,16 +1775,16 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
 
                                       setState(() {
                                         _selectedLv5 = newValue as String;
-                                        ;
                                         _selectedTitleLv5 =
                                             _itemLv5[checkValue]['title'];
                                       });
                                     },
                                     items: _itemLv5.map((item) {
                                       return DropdownMenuItem(
-                                        child: new Text(
+                                        value: item['code'],
+                                        child: Text(
                                           item['title'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 15.00,
                                             fontFamily: 'Sarabun',
                                             color: Color(
@@ -1801,12 +1792,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                             ),
                                           ),
                                         ),
-                                        value: item['code'],
                                       );
                                     }).toList(),
                                   )
                                 : DropdownButtonFormField(
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       errorStyle: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Sarabun',
@@ -1822,7 +1812,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                         value == '' || value == null
                                             ? 'โปรดระบุ'
                                             : null,
-                                    hint: Text(
+                                    hint: const Text(
                                       'โปรดระบุ',
                                       style: TextStyle(
                                         fontSize: 15.00,
@@ -1831,7 +1821,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     ),
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
-                                      new TextEditingController().clear();
+                                      TextEditingController().clear();
                                     },
                                     onChanged: (newValue) {
                                       var checkValue = _itemLv5.indexWhere(
@@ -1840,16 +1830,16 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
 
                                       setState(() {
                                         _selectedLv5 = newValue as String;
-                                        ;
                                         _selectedTitleLv5 =
                                             _itemLv5[checkValue]['title'];
                                       });
                                     },
                                     items: _itemLv5.map((item) {
                                       return DropdownMenuItem(
-                                        child: new Text(
+                                        value: item['code'],
+                                        child: Text(
                                           item['title'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 15.00,
                                             fontFamily: 'Sarabun',
                                             color: Color(
@@ -1857,7 +1847,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                             ),
                                           ),
                                         ),
-                                        value: item['code'],
                                       );
                                     }).toList(),
                                   ),
@@ -1865,11 +1854,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                         Center(
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.7,
-                            margin: EdgeInsets.symmetric(vertical: 5.0),
+                            margin: const EdgeInsets.symmetric(vertical: 5.0),
                             child: Material(
                               elevation: 5.0,
                               borderRadius: BorderRadius.circular(10.0),
-                              color: Color(0xFF9A1120),
+                              color: const Color(0xFF9A1120),
                               child: MaterialButton(
                                 minWidth: MediaQuery.of(context).size.width,
                                 height: 40,
@@ -1881,9 +1870,9 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     submitAddOrganization();
                                   }
                                 },
-                                child: new Text(
+                                child: const Text(
                                   'เพิ่มข้อมูล',
-                                  style: new TextStyle(
+                                  style: TextStyle(
                                     fontSize: 18.0,
                                     color: Colors.white,
                                     fontWeight: FontWeight.normal,
@@ -1897,11 +1886,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                         Center(
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.7,
-                            margin: EdgeInsets.symmetric(vertical: 5.0),
+                            margin: const EdgeInsets.symmetric(vertical: 5.0),
                             child: Material(
                               elevation: 5.0,
                               borderRadius: BorderRadius.circular(10.0),
-                              color: Color(0xFF9A1120),
+                              color: const Color(0xFF9A1120),
                               child: MaterialButton(
                                 minWidth: MediaQuery.of(context).size.width,
                                 height: 40,
@@ -1922,9 +1911,9 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                                     totalLv = 0;
                                   });
                                 },
-                                child: new Text(
+                                child: const Text(
                                   'ยกเลิก',
-                                  style: new TextStyle(
+                                  style: TextStyle(
                                     fontSize: 18.0,
                                     color: Colors.white,
                                     fontWeight: FontWeight.normal,
@@ -1943,8 +1932,8 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
               ),
             //   ],
             // ),
-            SizedBox(height: 5.0),
-            Text(
+            const SizedBox(height: 5.0),
+            const Text(
               'ข้อมูลผู้ใช้งาน',
               style: TextStyle(
                 fontSize: 18.00,
@@ -1953,7 +1942,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                 // color: Color(0xFFBC0611),
               ),
             ),
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             // labelTextFormField('* ชื่อผู้ใช้งาน'),
             textFormField(
               txtUsername,
@@ -1964,8 +1953,8 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
               false,
               false,
             ),
-            SizedBox(height: 15.0),
-            Text(
+            const SizedBox(height: 15.0),
+            const Text(
               'ข้อมูลส่วนตัว',
               style: TextStyle(
                 fontSize: 18.00,
@@ -1984,7 +1973,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
               false,
               false,
             ),
-            // new Container(
+            //  Container(
             //   width: 5000.0,
             //   padding: EdgeInsets.symmetric(
             //     horizontal: 5,
@@ -2028,7 +2017,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
             //     },
             //     items: _itemPrefixName.map((prefixName) {
             //       return DropdownMenuItem(
-            //         child: new Text(
+            //         child:  Text(
             //           prefixName,
             //           style: TextStyle(
             //             fontSize: 15.00,
@@ -2068,13 +2057,13 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
             GestureDetector(
               onTap: () {
                 FocusScope.of(context).unfocus();
-                new TextEditingController().clear();
+                TextEditingController().clear();
                 dialogOpenPickerDate();
               },
               child: AbsorbPointer(
                 child: TextFormField(
                   controller: txtDate,
-                  style: TextStyle(
+                  style: const TextStyle(
                     // color: Color(0xFF9A1120),
                     fontWeight: FontWeight.normal,
                     fontFamily: 'Sarabun',
@@ -2082,14 +2071,15 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                   ),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xFFC5DAFC),
-                    contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                    fillColor: const Color(0xFFC5DAFC),
+                    contentPadding:
+                        const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                     hintText: "วันเดือนปีเกิด",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: BorderSide.none,
                     ),
-                    errorStyle: TextStyle(
+                    errorStyle: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontFamily: 'Sarabun',
                       fontSize: 10.0,
@@ -2144,21 +2134,21 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
             ),
             labelTextFormField('* เพศ'),
 
-            new Container(
+            Container(
               width: 5000.0,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 5,
                 vertical: 0,
               ),
               decoration: BoxDecoration(
-                color: Color(0xFFC5DAFC),
+                color: const Color(0xFFC5DAFC),
                 borderRadius: BorderRadius.circular(
                   10,
                 ),
               ),
               child: _selectedSex != ''
                   ? DropdownButtonFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         errorStyle: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Sarabun',
@@ -2172,7 +2162,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       ),
                       validator: (value) =>
                           value == '' || value == null ? 'กรุณาเลือกเพศ' : null,
-                      hint: Text(
+                      hint: const Text(
                         'เพศ',
                         style: TextStyle(
                           fontSize: 15.00,
@@ -2182,7 +2172,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       value: _selectedSex,
                       onTap: () {
                         FocusScope.of(context).unfocus();
-                        new TextEditingController().clear();
+                        TextEditingController().clear();
                       },
                       onChanged: (newValue) {
                         setState(() {
@@ -2191,9 +2181,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       },
                       items: _itemSex.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 15.00,
                               fontFamily: 'Sarabun',
                               color: Color(
@@ -2201,12 +2192,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     )
                   : DropdownButtonFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         errorStyle: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Sarabun',
@@ -2220,7 +2210,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       ),
                       validator: (value) =>
                           value == '' || value == null ? 'กรุณาเลือกเพศ' : null,
-                      hint: Text(
+                      hint: const Text(
                         'เพศ',
                         style: TextStyle(
                           fontSize: 15.00,
@@ -2230,19 +2220,19 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       // value: _selectedSex,
                       onTap: () {
                         FocusScope.of(context).unfocus();
-                        new TextEditingController().clear();
+                        TextEditingController().clear();
                       },
                       onChanged: (newValue) {
                         setState(() {
                           _selectedSex = newValue as String;
-                          ;
                         });
                       },
                       items: _itemSex.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 15.00,
                               fontFamily: 'Sarabun',
                               color: Color(
@@ -2250,7 +2240,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     ),
@@ -2284,21 +2273,21 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
               false,
             ),
             labelTextFormField('* จังหวัด'),
-            new Container(
+            Container(
               width: 5000.0,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 5,
                 vertical: 0,
               ),
               decoration: BoxDecoration(
-                color: Color(0xFFC5DAFC),
+                color: const Color(0xFFC5DAFC),
                 borderRadius: BorderRadius.circular(
                   10,
                 ),
               ),
               child: (_selectedProvince != '')
                   ? DropdownButtonFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         errorStyle: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Sarabun',
@@ -2313,7 +2302,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       validator: (value) => value == '' || value == null
                           ? 'กรุณาเลือกจังหวัด'
                           : null,
-                      hint: Text(
+                      hint: const Text(
                         'จังหวัด',
                         style: TextStyle(
                           fontSize: 15.00,
@@ -2323,7 +2312,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       value: _selectedProvince,
                       onTap: () {
                         FocusScope.of(context).unfocus();
-                        new TextEditingController().clear();
+                        TextEditingController().clear();
                       },
                       onChanged: (newValue) {
                         setState(() {
@@ -2334,15 +2323,15 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                           _selectedPostalCode = "";
                           _itemPostalCode = [];
                           _selectedProvince = newValue as String;
-                          ;
                         });
                         getDistrict();
                       },
                       items: _itemProvince.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 15.00,
                               fontFamily: 'Sarabun',
                               color: Color(
@@ -2350,12 +2339,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     )
                   : DropdownButtonFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         errorStyle: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Sarabun',
@@ -2370,7 +2358,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       validator: (value) => value == '' || value == null
                           ? 'กรุณาเลือกจังหวัด'
                           : null,
-                      hint: Text(
+                      hint: const Text(
                         'จังหวัด',
                         style: TextStyle(
                           fontSize: 15.00,
@@ -2379,7 +2367,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       ),
                       onTap: () {
                         FocusScope.of(context).unfocus();
-                        new TextEditingController().clear();
+                        TextEditingController().clear();
                       },
                       onChanged: (newValue) {
                         setState(() {
@@ -2390,15 +2378,15 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                           _selectedPostalCode = "";
                           _itemPostalCode = [];
                           _selectedProvince = newValue as String;
-                          ;
                         });
                         getDistrict();
                       },
                       items: _itemProvince.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 15.00,
                               fontFamily: 'Sarabun',
                               color: Color(
@@ -2406,27 +2394,26 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     ),
             ),
             labelTextFormField('* อำเภอ'),
-            new Container(
+            Container(
               width: 5000.0,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 5,
                 vertical: 0,
               ),
               decoration: BoxDecoration(
-                color: Color(0xFFC5DAFC),
+                color: const Color(0xFFC5DAFC),
                 borderRadius: BorderRadius.circular(
                   10,
                 ),
               ),
               child: (_selectedDistrict != '')
                   ? DropdownButtonFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         errorStyle: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Sarabun',
@@ -2441,7 +2428,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       validator: (value) => value == '' || value == null
                           ? 'กรุณาเลือกอำเภอ'
                           : null,
-                      hint: Text(
+                      hint: const Text(
                         'อำเภอ',
                         style: TextStyle(
                           fontSize: 15.00,
@@ -2451,7 +2438,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       value: _selectedDistrict,
                       onTap: () {
                         FocusScope.of(context).unfocus();
-                        new TextEditingController().clear();
+                        TextEditingController().clear();
                       },
                       onChanged: (newValue) {
                         setState(() {
@@ -2460,15 +2447,15 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                           _selectedPostalCode = "";
                           _itemPostalCode = [];
                           _selectedDistrict = newValue as String;
-                          ;
                           getSubDistrict();
                         });
                       },
                       items: _itemDistrict.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 15.00,
                               fontFamily: 'Sarabun',
                               color: Color(
@@ -2476,12 +2463,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     )
                   : DropdownButtonFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         errorStyle: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Sarabun',
@@ -2496,7 +2482,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       validator: (value) => value == '' || value == null
                           ? 'กรุณาเลือกอำเภอ'
                           : null,
-                      hint: Text(
+                      hint: const Text(
                         'อำเภอ',
                         style: TextStyle(
                           fontSize: 15.00,
@@ -2505,7 +2491,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       ),
                       onTap: () {
                         FocusScope.of(context).unfocus();
-                        new TextEditingController().clear();
+                        TextEditingController().clear();
                       },
                       onChanged: (newValue) {
                         setState(() {
@@ -2514,15 +2500,15 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                           _selectedPostalCode = "";
                           _itemPostalCode = [];
                           _selectedDistrict = newValue as String;
-                          ;
                           getSubDistrict();
                         });
                       },
                       items: _itemDistrict.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 15.00,
                               fontFamily: 'Sarabun',
                               color: Color(
@@ -2530,27 +2516,26 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     ),
             ),
             labelTextFormField('* ตำบล'),
-            new Container(
+            Container(
               width: 5000.0,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 5,
                 vertical: 0,
               ),
               decoration: BoxDecoration(
-                color: Color(0xFFC5DAFC),
+                color: const Color(0xFFC5DAFC),
                 borderRadius: BorderRadius.circular(
                   10,
                 ),
               ),
               child: (_selectedSubDistrict != '')
                   ? DropdownButtonFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         errorStyle: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Sarabun',
@@ -2565,7 +2550,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       validator: (value) => value == '' || value == null
                           ? 'กรุณาเลือกตำบล'
                           : null,
-                      hint: Text(
+                      hint: const Text(
                         'ตำบล',
                         style: TextStyle(
                           fontSize: 15.00,
@@ -2575,22 +2560,22 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       value: _selectedSubDistrict,
                       onTap: () {
                         FocusScope.of(context).unfocus();
-                        new TextEditingController().clear();
+                        TextEditingController().clear();
                       },
                       onChanged: (newValue) {
                         setState(() {
                           _selectedPostalCode = "";
                           _itemPostalCode = [];
                           _selectedSubDistrict = newValue as String;
-                          ;
                           getPostalCode();
                         });
                       },
                       items: _itemSubDistrict.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 15.00,
                               fontFamily: 'Sarabun',
                               color: Color(
@@ -2598,12 +2583,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     )
                   : DropdownButtonFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         errorStyle: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Sarabun',
@@ -2618,7 +2602,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       validator: (value) => value == '' || value == null
                           ? 'กรุณาเลือกตำบล'
                           : null,
-                      hint: Text(
+                      hint: const Text(
                         'ตำบล',
                         style: TextStyle(
                           fontSize: 15.00,
@@ -2627,7 +2611,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       ),
                       onTap: () {
                         FocusScope.of(context).unfocus();
-                        new TextEditingController().clear();
+                        TextEditingController().clear();
                       },
                       onChanged: (newValue) {
                         setState(() {
@@ -2639,9 +2623,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       },
                       items: _itemSubDistrict.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['title'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 15.00,
                               fontFamily: 'Sarabun',
                               color: Color(
@@ -2649,27 +2634,26 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     ),
             ),
             labelTextFormField('* รหัสไปรษณีย์'),
-            new Container(
+            Container(
               width: 5000.0,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 5,
                 vertical: 0,
               ),
               decoration: BoxDecoration(
-                color: Color(0xFFC5DAFC),
+                color: const Color(0xFFC5DAFC),
                 borderRadius: BorderRadius.circular(
                   10,
                 ),
               ),
               child: (_selectedPostalCode != '')
                   ? DropdownButtonFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         errorStyle: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Sarabun',
@@ -2684,7 +2668,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       validator: (value) => value == '' || value == null
                           ? 'กรุณาเลือกรหัสไปรษณีย์'
                           : null,
-                      hint: Text(
+                      hint: const Text(
                         'รหัสไปรษณีย์',
                         style: TextStyle(
                           fontSize: 15.00,
@@ -2694,7 +2678,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       value: _selectedPostalCode,
                       onTap: () {
                         FocusScope.of(context).unfocus();
-                        new TextEditingController().clear();
+                        TextEditingController().clear();
                       },
                       onChanged: (newValue) {
                         setState(() {
@@ -2703,9 +2687,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       },
                       items: _itemPostalCode.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['postCode'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 15.00,
                               fontFamily: 'Sarabun',
                               color: Color(
@@ -2713,12 +2698,11 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     )
                   : DropdownButtonFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         errorStyle: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Sarabun',
@@ -2733,7 +2717,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       validator: (value) => value == '' || value == null
                           ? 'กรุณาเลือกรหัสไปรษณีย์'
                           : null,
-                      hint: Text(
+                      hint: const Text(
                         'รหัสไปรษณีย์',
                         style: TextStyle(
                           fontSize: 15.00,
@@ -2742,7 +2726,7 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       ),
                       onTap: () {
                         FocusScope.of(context).unfocus();
-                        new TextEditingController().clear();
+                        TextEditingController().clear();
                       },
                       onChanged: (newValue) {
                         setState(() {
@@ -2751,9 +2735,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                       },
                       items: _itemPostalCode.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(
+                          value: item['code'],
+                          child: Text(
                             item['postCode'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 15.00,
                               fontFamily: 'Sarabun',
                               color: Color(
@@ -2761,18 +2746,17 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                               ),
                             ),
                           ),
-                          value: item['code'],
                         );
                       }).toList(),
                     ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(top: 10.0),
             ),
             Center(
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.7,
-                margin: EdgeInsets.symmetric(vertical: 10.0),
+                margin: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Material(
                   elevation: 5.0,
                   borderRadius: BorderRadius.circular(10.0),
@@ -2787,9 +2771,9 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                         submitUpdateUser();
                       }
                     },
-                    child: new Text(
+                    child: const Text(
                       'บันทึกข้อมูล',
-                      style: new TextStyle(
+                      style: TextStyle(
                         fontSize: 18.0,
                         color: Colors.white,
                         fontWeight: FontWeight.normal,
@@ -2807,12 +2791,12 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
   }
 
   dropdownMenuItemHaveData(
-    String _selected,
-    List<dynamic> _item,
+    String selected,
+    List<dynamic> item,
     String title,
   ) {
     return DropdownButtonFormField(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         errorStyle: TextStyle(
           fontWeight: FontWeight.normal,
           fontFamily: 'Sarabun',
@@ -2824,25 +2808,26 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
           ),
         ),
       ),
-      validator: (value) => value == null ? 'กรุณาเลือก' + title : null,
+      validator: (value) => value == null ? 'กรุณาเลือก$title' : null,
       hint: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 15.00,
           fontFamily: 'Sarabun',
         ),
       ),
-      value: _selected,
+      value: selected,
       onChanged: (newValue) {
         setState(() {
-          _selected = newValue as String;
+          selected = newValue as String;
         });
       },
-      items: _item.map((item) {
+      items: item.map((item) {
         return DropdownMenuItem(
-          child: new Text(
+          value: item['code'],
+          child: Text(
             item['title'],
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15.00,
               fontFamily: 'Sarabun',
               color: Color(
@@ -2850,19 +2835,18 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
               ),
             ),
           ),
-          value: item['code'],
         );
       }).toList(),
     );
   }
 
   dropdownMenuItemNoHaveData(
-    String _selected,
-    List<dynamic> _item,
+    String selected,
+    List<dynamic> item,
     String title,
   ) {
     return DropdownButtonFormField(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         errorStyle: TextStyle(
           fontWeight: FontWeight.normal,
           fontFamily: 'Sarabun',
@@ -2875,10 +2859,10 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
         ),
       ),
       validator: (value) =>
-          value == '' || value == null ? 'กรุณาเลือก' + title : null,
+          value == '' || value == null ? 'กรุณาเลือก$title' : null,
       hint: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 15.00,
           fontFamily: 'Sarabun',
         ),
@@ -2886,14 +2870,15 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
       // value: _selected,
       onChanged: (newValue) {
         setState(() {
-          _selected = newValue as String;
+          selected = newValue as String;
         });
       },
-      items: _item.map((item) {
+      items: item.map((item) {
         return DropdownMenuItem(
-          child: new Text(
+          value: item['code'],
+          child: Text(
             item['title'],
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15.00,
               fontFamily: 'Sarabun',
               color: Color(
@@ -2901,7 +2886,6 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
               ),
             ),
           ),
-          value: item['code'],
         );
       }).toList(),
     );
@@ -2913,27 +2897,27 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
       child: Row(
         children: <Widget>[
           Container(
-            child: new Padding(
-              padding: EdgeInsets.all(5.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5.0),
+              color: const Color(0xFF0B5C9E),
+            ),
+            width: 30.0,
+            height: 30.0,
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
               child: Image.asset(
                 urlImage,
                 height: 5.0,
                 width: 5.0,
               ),
             ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              color: Color(0xFF0B5C9E),
-            ),
-            width: 30.0,
-            height: 30.0,
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.63,
-            margin: EdgeInsets.only(left: 10.0, right: 10.0),
+            margin: const EdgeInsets.only(left: 10.0, right: 10.0),
             child: Text(
               title,
-              style: new TextStyle(
+              style: const TextStyle(
                 fontSize: 12.0,
                 color: Color(0xFF9A1120),
                 fontWeight: FontWeight.normal,
@@ -2963,31 +2947,30 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
     return FutureBuilder<dynamic>(
       future: futureModel,
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasError)
+        if (snapshot.hasError) {
           return Center(
             child: Container(
               color: Colors.white,
               child: dialogFail(context),
             ),
           );
-        else
+        } else {
           return Scaffold(
             appBar: header(context, goBack, title: 'ข้อมูลสมาชิก'),
-            backgroundColor: Color(0xFFFFFFFF),
-            body: Container(
-              child: ListView(
-                controller: scrollController,
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                children: <Widget>[
-                  Container(
-                    color: Colors.white,
-                    child: contentCard(),
-                  ),
-                ],
-              ),
+            backgroundColor: const Color(0xFFFFFFFF),
+            body: ListView(
+              controller: scrollController,
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              children: <Widget>[
+                Container(
+                  color: Colors.white,
+                  child: contentCard(),
+                ),
+              ],
             ),
           );
+        }
       },
     );
   }

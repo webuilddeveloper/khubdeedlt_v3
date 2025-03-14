@@ -8,17 +8,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:weconnect/pages/blank_page/blank_loading.dart';
 
 class VerifyTicket extends StatefulWidget {
-  VerifyTicket({Key? key, required this.model}) : super(key: key);
+  VerifyTicket({super.key, required this.model});
 
   final Future<dynamic> model;
-  final storage = new FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   @override
+  // ignore: library_private_types_in_public_api
   _VerifyTicket createState() => _VerifyTicket();
 }
 
 class _VerifyTicket extends State<VerifyTicket> {
-  final storage = new FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   late Future<dynamic> futureModel;
   int notVerifyLenght = 0;
   @override
@@ -41,7 +42,6 @@ class _VerifyTicket extends State<VerifyTicket> {
           //   return _buildCardNotRegister();
           // } else if (snapshot.hasError) {
           //   return BlankLoading();
-
         } else {
           return _buildCard();
         }
@@ -66,14 +66,14 @@ class _VerifyTicket extends State<VerifyTicket> {
     return Expanded(
       child: Container(
         height: 118,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Color(0xFFFFC200),
               Color(0xFFFF8E00),
             ],
             begin: Alignment.centerRight,
-            // end: new Alignment(1, 0.0),
+            // end:  Alignment(1, 0.0),
             end: Alignment.centerLeft,
           ),
         ),
@@ -85,18 +85,18 @@ class _VerifyTicket extends State<VerifyTicket> {
                 Expanded(
                   child: Container(
                     width: double.infinity,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
                           Color(0xFFFF8E00),
                           Color(0xFFFFC200),
                         ],
                         begin: Alignment.centerRight,
-                        // end: new Alignment(1, 0.0),
+                        // end:  Alignment(1, 0.0),
                         end: Alignment.centerLeft,
                       ),
                     ),
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -137,11 +137,11 @@ class _VerifyTicket extends State<VerifyTicket> {
               ],
             ),
             Container(
-              margin: EdgeInsets.only(top: 10.0),
+              margin: const EdgeInsets.only(top: 10.0),
               // padding: EdgeInsets.all(5),
               height: 30,
               width: 32,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 // color: Colors.transparent,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(15),
@@ -165,11 +165,11 @@ class _VerifyTicket extends State<VerifyTicket> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color(0xFFFFC200).withOpacity(0.5),
-              Color(0xFFFF8E00).withOpacity(0.3),
+              const Color(0xFFFFC200).withOpacity(0.5),
+              const Color(0xFFFF8E00).withOpacity(0.3),
             ],
             begin: Alignment.centerRight,
-            // end: new Alignment(1, 0.0),
+            // end:  Alignment(1, 0.0),
             end: Alignment.centerLeft,
           ),
         ),
@@ -182,19 +182,19 @@ class _VerifyTicket extends State<VerifyTicket> {
                   child: Container(
                     width: double.infinity,
                     // margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Color(0xFFFF7B06).withOpacity(0.6),
-                          Color(0xFFFFC200),
+                          const Color(0xFFFF7B06).withOpacity(0.6),
+                          const Color(0xFFFFC200),
                         ],
                         begin: Alignment.centerRight,
-                        // end: new Alignment(1, 0.0),
+                        // end:  Alignment(1, 0.0),
                         end: Alignment.centerLeft,
                       ),
                     ),
-                    child: Column(
+                    child: const Column(
                       children: [
                         Text(
                           'ตรวจสอบใบสั่งย้อนหลัง',
@@ -253,11 +253,10 @@ class _VerifyTicket extends State<VerifyTicket> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color(0xFFD3913F).withOpacity(0.5),
-                Color(0xFFD3913F).withOpacity(0.3),
+                const Color(0xFFD3913F).withOpacity(0.5),
+                const Color(0xFFD3913F).withOpacity(0.3),
               ],
               begin: Alignment.centerRight,
-              // end: new Alignment(1, 0.0),
               end: Alignment.centerLeft,
             ),
           ),
@@ -269,29 +268,22 @@ class _VerifyTicket extends State<VerifyTicket> {
                   Expanded(
                     child: Container(
                       width: double.infinity,
-                      margin: EdgeInsets.all(5),
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        // gradient: LinearGradient(
-                        //   colors: [
-                        //     Color(0xFFD3913F).withOpacity(0.6),
-                        //     Color(0xFFD3913F),
-                        //   ],
-                        //   begin: Alignment.centerRight,
-                        //   // end: new Alignment(1, 0.0),
-                        //   end: Alignment.centerLeft,
-                        // ),
+                      margin: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
+                      decoration: const BoxDecoration(
                         color: Color(0xFFD3913F),
                       ),
-                      child: Column(
+                      child: const Column(
                         children: [
-                          Text(
-                            'ตรวจสอบใบสั่ง',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.0,
-                              fontFamily: 'Sarabun',
-                              fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Text(
+                              'ตรวจสอบใบสั่ง',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18.0,
+                                fontFamily: 'Sarabun',
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Text(
@@ -324,7 +316,7 @@ class _VerifyTicket extends State<VerifyTicket> {
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(height: 10),
-                          Container(
+                          SizedBox(
                             width: double.infinity,
                             // color: Colors.white,
                             child: Text(
@@ -345,11 +337,11 @@ class _VerifyTicket extends State<VerifyTicket> {
                 ],
               ),
               Container(
-                margin: EdgeInsets.only(top: 10.0),
+                margin: const EdgeInsets.only(top: 10.0),
                 // padding: EdgeInsets.all(5),
                 height: 30,
                 width: 32,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   // color: Colors.transparent,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(15),
@@ -380,21 +372,21 @@ class _VerifyTicket extends State<VerifyTicket> {
       },
       child: Container(
         width: 118,
-        padding: EdgeInsets.symmetric(horizontal: 5),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        decoration: const BoxDecoration(
             gradient: LinearGradient(
           colors: [
             Color(0xFF9C040C),
             Color(0xFF64282A),
           ],
           begin: Alignment.centerRight,
-          // end: new Alignment(1, 0.0),
+          // end:  Alignment(1, 0.0),
           end: Alignment.centerLeft,
         )),
         child: Column(
           children: [
-            SizedBox(height: 15),
-            Text(
+            const SizedBox(height: 15),
+            const Text(
               'จำนวนใบสั่ง',
               style: TextStyle(
                 color: Colors.white,
@@ -404,7 +396,7 @@ class _VerifyTicket extends State<VerifyTicket> {
               maxLines: 2,
               textAlign: TextAlign.center,
             ),
-            Text(
+            const Text(
               'คงค้างดำเนินการ',
               style: TextStyle(
                 color: Colors.white,
@@ -423,7 +415,7 @@ class _VerifyTicket extends State<VerifyTicket> {
                     alignment: Alignment.center,
                     child: Text(
                       param.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white,
                           fontSize: 50.0,
                           fontFamily: 'Sarabun',
@@ -431,13 +423,13 @@ class _VerifyTicket extends State<VerifyTicket> {
                       maxLines: 1,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 30),
+                    padding: const EdgeInsets.only(top: 30),
                     alignment: Alignment.center,
-                    child: Text(
+                    child: const Text(
                       '(ใบ)',
                       style: TextStyle(
                         color: Colors.white,

@@ -8,16 +8,16 @@ import 'car_registration_des.dart';
 import 'vehicle_inspectio.dart';
 
 class CarRegistration extends StatefulWidget {
-  CarRegistration({Key? key, required this.type}) : super(key: key);
+  const CarRegistration({super.key, required this.type});
 
   final String type;
   @override
+  // ignore: library_private_types_in_public_api
   _CarRegistrationPageState createState() => _CarRegistrationPageState();
 }
 
 class _CarRegistrationPageState extends State<CarRegistration> {
-  late Future<dynamic> _futureModel;
-  final storage = new FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   dynamic tempData;
   dynamic categoryList = [
     {'title': '1', 'value': 0},
@@ -28,9 +28,9 @@ class _CarRegistrationPageState extends State<CarRegistration> {
   String imageTemp =
       'https://instagram.fbkk5-6.fna.fbcdn.net/v/t51.2885-15/sh0.08/e35/c0.180.1440.1440a/s640x640/133851894_231577355006812_2104786467046058604_n.jpg?_nc_ht=instagram.fbkk5-6.fna.fbcdn.net&_nc_cat=1&_nc_ohc=t-y0eYG-FkYAX8VbpYj&tp=1&oh=d5fed0e8846f1056c70836b6fce223eb&oe=601E2B77';
   int selectedCategory = 0;
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  GlobalKey globalKey = new GlobalKey();
+  GlobalKey globalKey = GlobalKey();
 
   dynamic model = [
     {
@@ -492,7 +492,7 @@ class _CarRegistrationPageState extends State<CarRegistration> {
           );
         },
       ),
-      backgroundColor: Color(0xFFF5F8FB),
+      backgroundColor: const Color(0xFFF5F8FB),
       body: InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
@@ -523,15 +523,15 @@ class _CarRegistrationPageState extends State<CarRegistration> {
       children: [
         Container(
           height: 60,
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          margin: EdgeInsets.only(bottom: 1),
-          child: Row(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          margin: const EdgeInsets.only(bottom: 1),
+          child: const Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  new Text(
+                  Text(
                     'ทะเบียนทั้งหมด',
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
@@ -546,13 +546,13 @@ class _CarRegistrationPageState extends State<CarRegistration> {
           ),
         ),
         // SizedBox(height: 10),
-        this.model.length > 0
+        model.length > 0
             ? Expanded(
                 child: ListView(
                   children: [
-                    _buildCard(this.model[0]),
-                    SizedBox(height: 20),
-                    _buildCard(this.model[1]),
+                    _buildCard(model[0]),
+                    const SizedBox(height: 20),
+                    _buildCard(model[1]),
                   ],
                 ),
 
@@ -587,7 +587,7 @@ class _CarRegistrationPageState extends State<CarRegistration> {
   _buildCard(dynamic model) {
     return InkWell(
       onTap: () {
-        if (widget.type.toUpperCase() == 'C')
+        if (widget.type.toUpperCase() == 'C') {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -596,7 +596,8 @@ class _CarRegistrationPageState extends State<CarRegistration> {
               ),
             ),
           );
-        else if (widget.type.toUpperCase() == 'V')
+        } else if (widget.type.toUpperCase() == 'V')
+          // ignore: curly_braces_in_flow_control_structures
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -607,114 +608,62 @@ class _CarRegistrationPageState extends State<CarRegistration> {
           );
       },
       child: Container(
-        height: 130,
-        padding: EdgeInsets.symmetric(horizontal: 5),
+        height: MediaQuery.of(context).size.height * 0.18,
+        padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Container(
-          margin: EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 5),
-          padding: EdgeInsets.all(3),
+          margin: const EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 5),
+          padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black,
                 spreadRadius: 4,
               ),
             ],
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: Text(
+          child: Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
                       '${model['plate1']}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Sarabun',
                         fontSize: 40,
                         color: Colors.black,
                       ),
                     ),
-                  ),
-                  SizedBox(width: 20),
-                  Container(
-                    child: Text(
+                    const SizedBox(width: 20),
+                    Text(
                       '${model['plate2']}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Sarabun',
                         fontSize: 40,
                         color: Colors.black,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Container(
+                  ],
+                ),
+                Expanded(
                   child: Text(
                     '${model['plate3']}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Sarabun',
                       fontSize: 55,
                       color: Colors.black,
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
-  }
-
-  _screen(dynamic model) {
-    return SmartRefresher(
-      enablePullDown: false,
-      enablePullUp: true,
-      footer: ClassicFooter(
-        loadingText: ' ',
-        canLoadingText: ' ',
-        idleText: ' ',
-        idleIcon: Icon(Icons.arrow_upward, color: Colors.transparent),
-      ),
-      controller: _refreshController,
-      onLoading: _onLoading,
-      onRefresh: _onRefresh,
-      child: ListView.builder(
-        physics: ScrollPhysics(),
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        itemCount: model.length,
-        itemBuilder: (context, index) {
-          return _buildCard(model[index]);
-        },
-      ),
-    );
-  }
-
-  _update() async {}
-
-  _onLoading() async {
-    // setState(() {
-    //   _limit = _limit + 2;
-    // });
-    _callRead();
-
-    await Future.delayed(Duration(milliseconds: 2000));
-
-    _refreshController.loadComplete();
-  }
-
-  void _onRefresh() async {
-    // getCurrentUserData();
-    // _getLocation();
-    _callRead();
-
-    // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
-    // _refreshController.loadComplete();
   }
 }

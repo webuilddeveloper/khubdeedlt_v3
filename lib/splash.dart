@@ -22,8 +22,6 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   void initState() {
-    print(
-        '-------------------------------START---------------------------------');
     _callRead();
     super.initState();
   }
@@ -48,8 +46,6 @@ class _SplashPageState extends State<SplashPage> {
     String? value = await storage.read(key: 'profileCode2');
 
     if (value != null && value != '') {
-      print(
-          '-------------------------------HomePageV2---------------------------------');
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => HomePageV2(),
@@ -57,8 +53,6 @@ class _SplashPageState extends State<SplashPage> {
         (Route<dynamic> route) => false,
       );
     } else {
-      print(
-          '-------------------------------LoginPage---------------------------------');
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => LoginPage(

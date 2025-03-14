@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:weconnect/home_v2.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,10 +20,9 @@ class EditUserInformationPage extends StatefulWidget {
 }
 
 class _EditUserInformationPageState extends State<EditUserInformationPage> {
-  final storage = new FlutterSecureStorage();
+  final storage = FlutterSecureStorage();
 
-  late String _imageUrl;
-  late String _code;
+  late String _imageUrl = '';
 
   final _formKey = GlobalKey<FormState>();
 
@@ -71,7 +69,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
 
   late Future<dynamic> futureModel;
 
-  ScrollController scrollController = new ScrollController();
+  ScrollController scrollController = ScrollController();
 
   late XFile _image;
 
@@ -100,7 +98,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
     futureModel = getUser();
 
     scrollController = ScrollController();
-    var now = new DateTime.now();
+    var now = DateTime.now();
     setState(() {
       year = now.year;
       month = now.month;
@@ -208,7 +206,6 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
           txtEmail.text = result['objectData'][0]['email'] ?? '';
           txtPhone.text = result['objectData'][0]['phone'] ?? '';
           _selectedPrefixName = result['objectData'][0]['prefixName'];
-          _code = result['objectData'][0]['code'] ?? '';
           txtPhone.text = result['objectData'][0]['phone'] ?? '';
           txtUsername.text = result['objectData'][0]['username'] ?? '';
           txtIdCard.text = result['objectData'][0]['idcard'] ?? '';
@@ -309,7 +306,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
               return Future.value(false);
             },
             child: CupertinoAlertDialog(
-              title: new Text(
+              title: Text(
                 'อัพเดตข้อมูลเรียบร้อยแล้ว',
                 style: TextStyle(
                   fontSize: 16,
@@ -322,7 +319,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
               actions: [
                 CupertinoDialogAction(
                   isDefaultAction: true,
-                  child: new Text(
+                  child: Text(
                     "ตกลง",
                     style: TextStyle(
                       fontSize: 13,
@@ -356,7 +353,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
               return Future.value(false);
             },
             child: CupertinoAlertDialog(
-              title: new Text(
+              title: Text(
                 'อัพเดตข้อมูลไม่สำเร็จ',
                 style: TextStyle(
                   fontSize: 16,
@@ -365,7 +362,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                   fontWeight: FontWeight.normal,
                 ),
               ),
-              content: new Text(
+              content: Text(
                 result['message'],
                 style: TextStyle(
                   fontSize: 13,
@@ -377,7 +374,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
               actions: [
                 CupertinoDialogAction(
                   isDefaultAction: true,
-                  child: new Text(
+                  child: Text(
                     "ตกลง",
                     style: TextStyle(
                       fontSize: 13,
@@ -411,7 +408,6 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
         txtPhone.text = user['phone'] ?? '';
         _selectedPrefixName = user['prefixName'];
         txtPrefixName.text = user['prefixName'] ?? '';
-        _code = user['code'];
         _selectedProvince = user['provinceCode'] ?? '';
         _selectedDistrict = user['amphoeCode'] ?? '';
         _selectedSubDistrict = user['tambonCode'] ?? '';
@@ -657,7 +653,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
             // ),
             // labelTextFormField('* เพศ'),
 
-            // new Container(
+            //  Container(
             //   width: 5000.0,
             //   padding: EdgeInsets.symmetric(
             //     horizontal: 5,
@@ -700,7 +696,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
             //     },
             //     items: _itemSex.map((item) {
             //       return DropdownMenuItem(
-            //         child: new Text(
+            //         child:  Text(
             //           item['title'],
             //           style: TextStyle(
             //             fontSize: 15.00,
@@ -743,7 +739,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
             //   true,
             //   false,
             // ),
-            // new Container(
+            //  Container(
             //   width: 5000.0,
             //   padding: EdgeInsets.symmetric(
             //     horizontal: 5,
@@ -787,7 +783,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
             //           },
             //           items: _itemPostalCode.map((item) {
             //             return DropdownMenuItem(
-            //               child: new Text(
+            //               child:  Text(
             //                 item['postCode'],
             //                 style: TextStyle(
             //                   fontSize: 15.00,
@@ -831,7 +827,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
             //           },
             //           items: _itemPostalCode.map((item) {
             //             return DropdownMenuItem(
-            //               child: new Text(
+            //               child:  Text(
             //                 item['postCode'],
             //                 style: TextStyle(
             //                   fontSize: 15.00,
@@ -867,9 +863,9 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                         submitUpdateUser();
                       }
                     },
-                    child: new Text(
+                    child: Text(
                       'บันทึกข้อมูล',
-                      style: new TextStyle(
+                      style: TextStyle(
                         fontSize: 13.0,
                         color: Colors.white,
                         fontWeight: FontWeight.normal,
@@ -892,7 +888,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
       child: Row(
         children: <Widget>[
           Container(
-            child: new Padding(
+            child: Padding(
               padding: EdgeInsets.all(5.0),
               child: Image.asset(
                 urlImage,
@@ -912,7 +908,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
             margin: EdgeInsets.only(left: 10.0, right: 10.0),
             child: Text(
               title,
-              style: new TextStyle(
+              style: TextStyle(
                 fontSize: 12.0,
                 color: Color(0xFF9A1120),
                 fontWeight: FontWeight.normal,
@@ -973,11 +969,11 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
       builder: (BuildContext bc) {
         return SafeArea(
           child: Container(
-            child: new Wrap(
+            child: Wrap(
               children: <Widget>[
-                new ListTile(
-                    leading: new Icon(Icons.photo_library),
-                    title: new Text(
+                ListTile(
+                    leading: Icon(Icons.photo_library),
+                    title: Text(
                       'อัลบั้มรูปภาพ',
                       style: TextStyle(
                         fontSize: 13,
@@ -989,9 +985,9 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                       _imgFromGallery();
                       Navigator.of(context).pop();
                     }),
-                new ListTile(
-                  leading: new Icon(Icons.photo_camera),
-                  title: new Text(
+                ListTile(
+                  leading: Icon(Icons.photo_camera),
+                  title: Text(
                     'กล้องถ่ายรูป',
                     style: TextStyle(
                       fontSize: 13,
@@ -1093,7 +1089,9 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                                     padding: EdgeInsets.all(10.0),
                                     child: Image.asset(
                                       'assets/images/user_not_found.png',
-                                      color: Theme.of(context).colorScheme.secondary,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                     ),
                                   ),
                           ),

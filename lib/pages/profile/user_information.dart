@@ -1,10 +1,6 @@
-import 'package:url_launcher/url_launcher.dart';
 import 'package:weconnect/component/material/custom_alert_dialog.dart';
-import 'package:weconnect/pages/about_us/about_us_form.dart';
 import 'package:weconnect/pages/blank_page/dialog_fail.dart';
-import 'package:weconnect/pages/profile/drivers_info.dart';
 import 'package:weconnect/pages/profile/edit_user_information.dart';
-import 'package:weconnect/pages/profile/id_card_info.dart';
 import 'package:weconnect/pages/profile/id_card_verification.dart';
 import 'package:weconnect/pages/profile/identity_verification.dart';
 import 'package:weconnect/pages/profile/setting_notification.dart';
@@ -18,20 +14,21 @@ import 'register_with_diver_license.dart';
 import 'register_with_license_plate.dart';
 
 class UserInformationPage extends StatefulWidget {
+  const UserInformationPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _UserInformationPageState createState() => _UserInformationPageState();
 }
 
 class _UserInformationPageState extends State<UserInformationPage> {
   final storage = const FlutterSecureStorage();
   late Future<dynamic> _futureProfile;
-  late Future<dynamic> _futureAboutUs;
   final dynamic _tempData = {'imageUrl': '', 'firstName': '', 'lastName': ''};
 
   @override
   void initState() {
     _read();
-    _futureAboutUs = postDio('${aboutUsApi}read', {});
     super.initState();
   }
 
@@ -63,14 +60,15 @@ class _UserInformationPageState extends State<UserInformationPage> {
   _read() async {
     //read profile
     var profileCode = await storage.read(key: 'profileCode2');
-    if (profileCode != '' && profileCode != null)
+    if (profileCode != '' && profileCode != null) {
       setState(() {
         _futureProfile = postDio(profileReadApi, {"code": profileCode});
       });
+    }
   }
 
   _goBack() async {
-    Navigator.pop(context, false);
+    Navigator.pop(context, true);
     // Navigator.of(context).pushAndRemoveUntil(
     //   MaterialPageRoute(
     //     builder: (context) => HomePage(),
@@ -302,7 +300,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CarRegistration(
+                            builder: (context) => const CarRegistration(
                               type: 'C',
                             ),
                           ),
@@ -314,7 +312,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CarRegistration(
+                            builder: (context) => const CarRegistration(
                               type: 'V',
                             ),
                           ),

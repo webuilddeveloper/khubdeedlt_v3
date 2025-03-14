@@ -25,12 +25,11 @@ import 'package:weconnect/pages/welfare/welfare_list.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:weconnect/component/link_url_in.dart';
-import 'package:weconnect/profile.dart';
 import 'package:weconnect/pages/contact /contact_list_category.dart';
 import 'package:weconnect/pages/news/news_list.dart';
 import 'package:weconnect/pages/privilege/privilege_main.dart';
 import 'package:weconnect/pages/profile/user_information.dart';
+import 'package:weconnect/profile.dart';
 import 'package:weconnect/shared/api_provider.dart';
 import 'package:weconnect/component/carousel_form.dart';
 import 'pages/event_calendar/event_calendar_main.dart';
@@ -38,6 +37,8 @@ import 'pages/knowledge/knowledge_list.dart';
 import 'pages/main_popup/dialog_main_popup.dart';
 
 class HomePageV2 extends StatefulWidget {
+  const HomePageV2({super.key});
+
   @override
   _HomePageV2State createState() => _HomePageV2State();
 }
@@ -47,8 +48,7 @@ class _HomePageV2State extends State<HomePageV2> {
   late DateTime currentBackPressTime;
 
   late Future<dynamic> _futureBanner;
-  late Future<dynamic> _futureProfile;
-  late Future<dynamic> _futureOrganizationImage;
+  late Future<dynamic> _futureProfile = Future.value(null);
   late Future<dynamic> _futureMenu;
   late Future<dynamic> _futureRotation;
   late Future<dynamic> _futureAboutUs;
@@ -64,8 +64,6 @@ class _HomePageV2State extends State<HomePageV2> {
   bool chkisCard = false;
   bool notShowOnDay = false;
   bool hiddenMainPopUp = false;
-  List<dynamic> _dataPolicy = [];
-  bool checkDirection = false;
 
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -89,8 +87,7 @@ class _HomePageV2State extends State<HomePageV2> {
 
   Future<bool> confirmExit() {
     DateTime now = DateTime.now();
-    if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+    if (now.difference(currentBackPressTime) > Duration(seconds: 2)) {
       currentBackPressTime = now;
       toastFail(
         context,
@@ -216,12 +213,12 @@ class _HomePageV2State extends State<HomePageV2> {
             _buildProfile(),
             _buildVerifyTicket(),
             _buildRotation(),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             // _buildGridMenu1(),
             // SizedBox(height: 1),
             // _buildGridMenu2(),
             chkisCard == false ? _buildDispute(1) : Container(),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             chkisCard == true ? _buildDispute(2) : Container(),
             _buildCardFirst(),
             _buildCardSecond(),
@@ -256,7 +253,7 @@ class _HomePageV2State extends State<HomePageV2> {
                 children: [
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       alignment: Alignment.centerLeft,
                       height: 60,
                       child: Image.asset(
@@ -353,8 +350,8 @@ class _HomePageV2State extends State<HomePageV2> {
       child: Container(
         height: 120,
         padding: param == 1
-            ? EdgeInsets.symmetric(horizontal: 25)
-            : EdgeInsets.symmetric(horizontal: 15),
+            ? const EdgeInsets.symmetric(horizontal: 25)
+            : const EdgeInsets.symmetric(horizontal: 15),
         width: double.infinity,
         decoration: const BoxDecoration(
           color: Colors.grey,
@@ -471,7 +468,7 @@ class _HomePageV2State extends State<HomePageV2> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => NewsList(
+                builder: (context) => const NewsList(
                   title: 'ข่าวประชาสัมพันธ์',
                 ),
               ),
@@ -1034,7 +1031,6 @@ class _HomePageV2State extends State<HomePageV2> {
       ),
     );
 
-    ;
   }
 
   _buildPoiMenu() {
@@ -1150,11 +1146,9 @@ class _HomePageV2State extends State<HomePageV2> {
 
     //read profile
     profileCode = (await storage.read(key: 'profileCode2'))!;
-    if (profileCode != '' && profileCode != null) {
+    if (profileCode != '') {
       setState(() {
         _futureProfile = postDio(profileReadApi, {"code": profileCode});
-        _futureOrganizationImage =
-            postDio(organizationImageReadApi, {"code": profileCode});
       });
       _futureMenu = postDio('${menuApi}read', {'limit': 10});
       _futureBanner = postDio('${mainBannerApi}read', {'limit': 10});

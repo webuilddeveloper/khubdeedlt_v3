@@ -52,8 +52,6 @@ class _LoginPageState extends State<LoginPage> {
   late String _lastName;
 
   late Map userProfile;
-  bool _isOnlyWebLogin = false;
-
   late DataUser dataUser;
 
   final txtUsername = TextEditingController();
@@ -377,49 +375,45 @@ class _LoginPageState extends State<LoginPage> {
                                             ? idToken['email'] ?? ''
                                             : '';
 
-                                        if (obj != null) {
-                                          var model = {
-                                            "username": userEmail == ''
-                                                ? obj.userProfile?.userId
-                                                : userEmail,
-                                            "email": userEmail,
-                                            "imageUrl":
-                                                obj.userProfile?.pictureUrl,
-                                            "firstName":
-                                                obj.userProfile?.displayName,
-                                            "lastName": '',
-                                            "lineID": obj.userProfile?.userId
-                                          };
+                                        var model = {
+                                          "username": userEmail == ''
+                                              ? obj.userProfile?.userId
+                                              : userEmail,
+                                          "email": userEmail,
+                                          "imageUrl":
+                                              obj.userProfile?.pictureUrl,
+                                          "firstName":
+                                              obj.userProfile?.displayName,
+                                          "lastName": '',
+                                          "lineID": obj.userProfile?.userId
+                                        };
 
-                                          Dio dio = Dio();
-                                          var response = await dio.post(
-                                            '${server}m/v2/register/line/login',
-                                            data: model,
-                                          );
+                                        Dio dio = Dio();
+                                        var response = await dio.post(
+                                          '${server}m/v2/register/line/login',
+                                          data: model,
+                                        );
 
-                                          // print(response.data['objectData']['code']);
-                                          // storage.write(
-                                          //   key: 'profileCode2',
-                                          //   value: response.data['objectData']['code'],
-                                          // );
+                                        // print(response.data['objectData']['code']);
+                                        // storage.write(
+                                        //   key: 'profileCode2',
+                                        //   value: response.data['objectData']['code'],
+                                        // );
 
-                                          // storage.write(key: 'profileCategory', value: 'line');
+                                        // storage.write(key: 'profileCategory', value: 'line');
 
-                                          createStorageApp(
-                                            model: response.data['objectData'],
-                                            category: 'line',
-                                          );
+                                        createStorageApp(
+                                          model: response.data['objectData'],
+                                          category: 'line',
+                                        );
 
-                                          if (obj != null) {
-                                            // Navigator.pushReplacement(
-                                            //   context,
-                                            //   MaterialPageRoute(
-                                            //     builder: (context) =>
-                                            //         HomePageV2(),
-                                            //   ),
-                                            // );
-                                          }
-                                        }
+                                        // Navigator.pushReplacement(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) =>
+                                        //         HomePageV2(),
+                                        //   ),
+                                        // );
                                       },
                                       icon: Image.asset(
                                         "assets/logo/socials/Group381.png",
@@ -778,14 +772,12 @@ class _LoginPageState extends State<LoginPage> {
       category: 'apple',
     );
 
-    if (obj != null) {
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => HomePageV2(),
-      //   ),
-      // );
-    }
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => HomePageV2(),
+    //   ),
+    // );
   }
 
   // Fixed Facebook login method
@@ -819,14 +811,12 @@ class _LoginPageState extends State<LoginPage> {
         category: 'facebook',
       );
 
-      if (obj != null) {
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => HomePageV2(),
-        //   ),
-        // );
-      }
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => HomePageV2(),
+      //   ),
+      // );
     }
   }
 
@@ -834,45 +824,41 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _loginGoogle() async {
     var obj = await signInWithGoogle();
     // print('----- Login Google ----- ' + obj.toString());
-    if (obj != null) {
-      var model = {
-        "username": obj.user?.email,
-        "email": obj.user?.email,
-        "imageUrl": obj.user?.photoURL != null ? obj.user?.photoURL : '',
-        "firstName": obj.user?.displayName,
-        "lastName": '',
-        "googleID": obj.user?.uid
-      };
+    var model = {
+      "username": obj.user?.email,
+      "email": obj.user?.email,
+      "imageUrl": obj.user?.photoURL != null ? obj.user?.photoURL : '',
+      "firstName": obj.user?.displayName,
+      "lastName": '',
+      "googleID": obj.user?.uid
+    };
 
-      Dio dio = Dio();
-      var response = await dio.post(
-        '${server}m/v2/register/google/login',
-        data: model,
-      );
+    Dio dio = Dio();
+    var response = await dio.post(
+      '${server}m/v2/register/google/login',
+      data: model,
+    );
 
-      await storage.write(
-        key: 'categorySocial',
-        value: 'Google',
-      );
+    await storage.write(
+      key: 'categorySocial',
+      value: 'Google',
+    );
 
-      await storage.write(
-        key: 'imageUrlSocial',
-        value: obj.user?.photoURL != null ? obj.user!.photoURL : '',
-      );
+    await storage.write(
+      key: 'imageUrlSocial',
+      value: obj.user?.photoURL != null ? obj.user!.photoURL : '',
+    );
 
-      createStorageApp(
-        model: response.data['objectData'],
-        category: 'google',
-      );
+    createStorageApp(
+      model: response.data['objectData'],
+      category: 'google',
+    );
 
-      if (obj != null) {
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => HomePageV2(),
-        //   ),
-        // );
-      }
-    }
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => HomePageV2(),
+    //   ),
+    // );
   }
 }

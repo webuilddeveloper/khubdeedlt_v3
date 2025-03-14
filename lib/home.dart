@@ -12,9 +12,7 @@ import 'package:weconnect/pages/blank_page/toast_fail.dart';
 import 'package:weconnect/pages/dispute_an_allegation.dart';
 import 'package:weconnect/pages/reporter/reporter_main.dart';
 import 'package:weconnect/pages/warning/warning_list.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -41,17 +39,19 @@ import 'pages/knowledge/knowledge_list.dart';
 import 'pages/main_popup/dialog_main_popup.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final storage = new FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   late DateTime currentBackPressTime;
 
   late Future<dynamic> _futureBanner;
   late Future<dynamic> _futureProfile;
-  late Future<dynamic> _futureOrganizationImage;
   late Future<dynamic> _futureMenu;
   late Future<dynamic> _futureRotation;
   late Future<dynamic> _futureAboutUs;
@@ -60,19 +60,18 @@ class _HomePageState extends State<HomePage> {
 
   String profileCode = '';
   String currentLocation = '-';
-  final seen = Set<String>();
+  final seen = <String>{};
   List unique = [];
   List imageLv0 = [];
 
   bool notShowOnDay = false;
   bool hiddenMainPopUp = false;
-  List<dynamic> _dataPolicy = [];
   bool checkDirection = false;
 
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  LatLng latLng = LatLng(13.743989326935178, 100.53754006134743);
+  LatLng latLng = const LatLng(13.743989326935178, 100.53754006134743);
 
   @override
   void initState() {
@@ -85,14 +84,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _buildHeader(),
+      // ignore: deprecated_member_use
       body: WillPopScope(child: _buildBackground(), onWillPop: confirmExit),
     );
   }
 
   Future<bool> confirmExit() {
     DateTime now = DateTime.now();
-    if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+    if (now.difference(currentBackPressTime) > const Duration(seconds: 2)) {
       currentBackPressTime = now;
       toastFail(
         context,
@@ -125,27 +124,25 @@ class _HomePageState extends State<HomePage> {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: false,
-      header: WaterDropHeader(
-        complete: Container(
-          child: Text(''),
-        ),
+      header: const WaterDropHeader(
+        complete: Text(''),
         completeDuration: Duration(milliseconds: 0),
       ),
       footer: CustomFooter(
         builder: (BuildContext context, LoadStatus? mode) {
           Widget body;
           if (mode == LoadStatus.idle) {
-            body = Text("pull up load");
+            body = const Text("pull up load");
           } else if (mode == LoadStatus.loading) {
-            body = Text("loading");
+            body = const Text("loading");
           } else if (mode == LoadStatus.failed) {
-            body = Text("Load Failed!Click retry!");
+            body = const Text("Load Failed!Click retry!");
           } else if (mode == LoadStatus.canLoading) {
-            body = Text("release to load more");
+            body = const Text("release to load more");
           } else {
-            body = Text("No more Data");
+            body = const Text("No more Data");
           }
-          return Container(
+          return SizedBox(
             height: 55.0,
             child: Center(child: body),
           );
@@ -166,9 +163,9 @@ class _HomePageState extends State<HomePage> {
         _buildProfile(),
         _buildVerifyTicket(),
         _buildDispute(),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         _buildRotation(),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         _buildCardFirst(),
         _buildCardSecond(),
         _buildCardThird(),
@@ -185,7 +182,7 @@ class _HomePageState extends State<HomePage> {
         flexibleSpace: Container(
           width: double.infinity,
           // height: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/background/background_header.png'),
               fit: BoxFit.cover,
@@ -194,12 +191,12 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
+              const Text(
                 'สำนักงานตำรวจแห่งชาติ',
                 style: TextStyle(
                     fontSize: 22.0, color: Colors.white, fontFamily: 'Mitr'),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
@@ -207,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       alignment: Alignment.centerLeft,
                       height: 50,
                       child: Image.asset(
@@ -226,12 +223,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     },
-                    child: Container(
+                    child: SizedBox(
                       height: 30,
                       child: Image.asset('assets/icons/bell.png'),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   InkWell(
@@ -239,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                       final msg = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserInformationPage(),
+                          builder: (context) => const UserInformationPage(),
                         ),
                       );
 
@@ -255,20 +252,20 @@ class _HomePageState extends State<HomePage> {
                           if (profileCode == snapshot.data['code']) {
                             return Container(
                               height: 50,
-                              padding: EdgeInsets.only(right: 10),
+                              padding: const EdgeInsets.only(right: 10),
                               child: checkAvatar(
                                   context, '${snapshot.data['imageUrl']}'),
                             );
                           } else {
-                            return BlankLoading(
+                            return const BlankLoading(
                               width: 20,
                               height: 20,
                             );
                           }
                         } else if (snapshot.hasError) {
-                          return BlankLoading();
+                          return const BlankLoading();
                         } else {
-                          return BlankLoading();
+                          return const BlankLoading();
                         }
                       },
                     ),
@@ -294,9 +291,9 @@ class _HomePageState extends State<HomePage> {
       },
       child: Container(
         height: 120,
-        padding: EdgeInsets.symmetric(horizontal: 25),
+        padding: const EdgeInsets.symmetric(horizontal: 25),
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.grey,
           image: DecorationImage(
             // image: NetworkImage('${model['imageUrl']}'),
@@ -304,7 +301,7 @@ class _HomePageState extends State<HomePage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
+        child: const Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
@@ -359,7 +356,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => NewsList(
+                builder: (context) => const NewsList(
                   title: 'ข่าวประชาสัมพันธ์',
                 ),
               ),
@@ -404,7 +401,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => KnowledgeList(
+                builder: (context) => const KnowledgeList(
                   title: 'ความรู้คู่การขับขี่',
                 ),
               ),
@@ -502,8 +499,8 @@ class _HomePageState extends State<HomePage> {
           // color: Color(0xFF000070),
           // padding: EdgeInsets.symmetric(horizontal: 5),
           alignment: Alignment.center,
-          padding: EdgeInsets.only(left: 10),
-          child: Row(
+          padding: const EdgeInsets.only(left: 10),
+          child: const Row(
             children: [
               Icon(Icons.credit_card),
               Text(
@@ -518,10 +515,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         Container(
-          // color: Color(0xFF000070),
-          // padding: EdgeInsets.symmetric(horizontal: 5),
           alignment: Alignment.center,
-          padding: EdgeInsets.only(right: 10),
+          padding: const EdgeInsets.only(right: 10),
           height: 40,
           child: Row(
             children: [
@@ -530,7 +525,7 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.orange[400],
               ),
               Text(
-                ' ' + currentLocation,
+                ' $currentLocation',
                 style: TextStyle(
                   fontFamily: 'Sarabun', color: Colors.orange[400],
                   // fontSize: 10,
@@ -818,7 +813,7 @@ class _HomePageState extends State<HomePage> {
 
   _buildContactMenu() {
     return Padding(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 3),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 3),
       child: FutureBuilder<dynamic>(
         future: _futureMenu, // function where you call your api
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -861,13 +856,11 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     );
-
-    ;
   }
 
   _buildPoiMenu() {
     return Padding(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 3),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 3),
       child: FutureBuilder<dynamic>(
         future: _futureMenu, // function where you call your api
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -903,7 +896,7 @@ class _HomePageState extends State<HomePage> {
 
   _buildPollMenu() {
     return Padding(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 3),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 3),
       child: FutureBuilder<dynamic>(
         future: _futureMenu, // function where you call your api
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -966,11 +959,9 @@ class _HomePageState extends State<HomePage> {
 
     //read profile
     profileCode = (await storage.read(key: 'profileCode2'))!;
-    if (profileCode != '' && profileCode != null) {
+    if (profileCode != '') {
       setState(() {
         _futureProfile = postDio(profileReadApi, {"code": profileCode});
-        _futureOrganizationImage =
-            postDio(organizationImageReadApi, {"code": profileCode});
       });
       _futureMenu = postDio('${menuApi}read', {'limit': 10});
       _futureBanner = postDio('${mainBannerApi}read', {'limit': 10});
@@ -1008,8 +999,8 @@ class _HomePageState extends State<HomePage> {
         dataValue = null;
       }
 
-      var now = new DateTime.now();
-      DateTime date = new DateTime(now.year, now.month, now.day);
+      var now = DateTime.now();
+      DateTime date = DateTime(now.year, now.month, now.day);
 
       if (dataValue != null) {
         var index = dataValue.indexWhere(
@@ -1083,7 +1074,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onLoading() async {
-    await Future.delayed(Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 1000));
     _refreshController.loadComplete();
   }
 
