@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:weconnect/component/header.dart';
 import '../../component/key_search.dart';
 import '../../component/tab_category.dart';
-import '../../shared/api_provider.dart'  as service;
+import '../../shared/api_provider.dart' as service;
 
-import '../../widget/header.dart';
 import 'welfare_list_vertical.dart';
 
 class WelfareList extends StatefulWidget {

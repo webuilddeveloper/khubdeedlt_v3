@@ -418,7 +418,7 @@ logout(BuildContext context) async {
 }
 
 Future<dynamic> postDio(String url, dynamic criteria) async {
-  final storage = new FlutterSecureStorage();
+  const storage = FlutterSecureStorage();
   final profileCode = await storage.read(key: 'profileCode2');
   final idcard = await storage.read(key: 'idcard');
   final username = await storage.read(key: 'username');
@@ -428,6 +428,7 @@ Future<dynamic> postDio(String url, dynamic criteria) async {
   }
 
   if (criteria['card_id'] == '' ||
+      // ignore: curly_braces_in_flow_control_structures
       criteria['card_id'] == null) if (idcard != '' && idcard != null) {
     criteria = {'card_id': idcard, ...criteria};
   }
@@ -443,7 +444,7 @@ Future<dynamic> postDio(String url, dynamic criteria) async {
 }
 
 Future<dynamic> postAnyDio(String url, dynamic criteria) async {
-  final storage = new FlutterSecureStorage();
+  const storage = FlutterSecureStorage();
 
   final profileCode = await storage.read(key: 'profileCode2');
   var idcard = await storage.read(key: 'idcard');

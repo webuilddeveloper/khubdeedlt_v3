@@ -59,7 +59,7 @@ class _VehicleInspectioPageState extends State<VehicleInspectio> {
           );
         },
       ),
-      backgroundColor: Color(0xFFF5F8FB),
+      backgroundColor: const Color(0xFFF5F8FB),
       body: InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
@@ -107,7 +107,7 @@ class _VehicleInspectioPageState extends State<VehicleInspectio> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "ข้อมูลการตรวจสอบรภ ณ วันที่ ${model[index]['examination_day']}",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontFamily: 'Kanit',
                       fontWeight: FontWeight.w500,

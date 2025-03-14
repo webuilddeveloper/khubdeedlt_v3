@@ -10,14 +10,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'car_registration.dart';
 import 'change_password.dart';
 import 'connect_social.dart';
-import 'register_with_diver_license.dart';
-import 'register_with_license_plate.dart';
 
 class UserInformationPage extends StatefulWidget {
   const UserInformationPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
+  // ignore: library_private_typses_in_public_api, library_private_types_in_public_api
   _UserInformationPageState createState() => _UserInformationPageState();
 }
 
@@ -88,7 +86,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
             children: [
               Stack(
                 children: [
-                  Container(
+                  SizedBox(
                     height: 270,
                     width: double.infinity,
                     child: Image.asset(
@@ -180,198 +178,196 @@ class _UserInformationPageState extends State<UserInformationPage> {
                 decoration: const BoxDecoration(
                   color: Colors.white,
                 ),
-                child: Container(
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditUserInformationPage(),
+                child: Column(
+                  children: [
+                    InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditUserInformationPage(),
+                        ),
+                      ),
+                      child: buttonMenuUser(
+                          'assets/icons/person.png', 'ข้อมูลผู้ใช้งาน'),
+                    ),
+                    // InkWell(
+                    //   onTap: () async {
+                    //     final msg = model['idcard'] == ''
+                    //         ? await showDialog(
+                    //             context: context,
+                    //             builder: (BuildContext context) {
+                    //               return _buildDialogRegister();
+                    //             },
+                    //           )
+                    //         : await Navigator.push(
+                    //             context,
+                    //             MaterialPageRoute(
+                    //               builder: (context) => IDCardInfo(),
+                    //             ),
+                    //           );
+                    //     if (!msg) {
+                    //       _read();
+                    //     }
+                    //   },
+                    //   child: buttonMenuUser(
+                    //       'assets/icons/id_card.png', 'ข้อมูลบัตรประชาชน'),
+                    // ),
+                    InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const IdentityVerificationPage(),
+                        ),
+                      ),
+                      child: buttonMenuUser(
+                          'assets/icons/papers.png', 'ข้อมูลสมาชิก'),
+                    ),
+                    InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SettingNotificationPage(),
+                        ),
+                      ),
+                      child: buttonMenuUser(
+                          'assets/icons/bell.png', 'ตั้งค่าการแจ้งเตือน'),
+                    ),
+                    // InkWell(
+                    //   onTap: () async {
+                    //     final msg = model['idcard'] == ''
+                    //         ? await showDialog(
+                    //             context: context,
+                    //             builder: (BuildContext context) {
+                    //               return _buildDialogRegister();
+                    //             })
+                    //         : model['isDF'] != true
+                    //             ? await showDialog(
+                    //                 context: context,
+                    //                 builder: (BuildContext context) {
+                    //                   return _buildDialogdriverLicence();
+                    //                 })
+                    //             : await Navigator.push(
+                    //                 context,
+                    //                 MaterialPageRoute(
+                    //                   builder: (context) => DriversInfo(),
+                    //                 ),
+                    //               );
+                    //     if (!msg) {
+                    //       _read();
+                    //     }
+                    //   },
+                    //   child:
+                    //       buttonMenuUser('assets/car.png', 'ข้อมูลใบขับขี่'),
+                    // ),
+                
+                    // InkWell(
+                    //   onTap: () => Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => AboutUsForm(
+                    //         model: _futureAboutUs,
+                    //         title: 'ติดต่อเรา',
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   child: buttonMenuUser(
+                    //       'assets/icons/phone.png', 'ติดต่อเรา'),
+                    // ),
+                    InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ConnectSocialPage(),
+                        ),
+                      ),
+                      child: buttonMenuUser(
+                          'assets/icons/link.png', 'การเชื่อมต่อ'),
+                    ),
+                    InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChangePasswordPage(),
+                        ),
+                      ),
+                      child: buttonMenuUser(
+                          'assets/icons/lock.png', 'เปลี่ยนรหัสผ่าน'),
+                    ),
+                    InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CarRegistration(
+                            type: 'C',
                           ),
                         ),
-                        child: buttonMenuUser(
-                            'assets/icons/person.png', 'ข้อมูลผู้ใช้งาน'),
                       ),
-                      // InkWell(
-                      //   onTap: () async {
-                      //     final msg = model['idcard'] == ''
-                      //         ? await showDialog(
-                      //             context: context,
-                      //             builder: (BuildContext context) {
-                      //               return _buildDialogRegister();
-                      //             },
-                      //           )
-                      //         : await Navigator.push(
-                      //             context,
-                      //             MaterialPageRoute(
-                      //               builder: (context) => IDCardInfo(),
-                      //             ),
-                      //           );
-                      //     if (!msg) {
-                      //       _read();
-                      //     }
-                      //   },
-                      //   child: buttonMenuUser(
-                      //       'assets/icons/id_card.png', 'ข้อมูลบัตรประชาชน'),
-                      // ),
-                      InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => IdentityVerificationPage(),
+                      child: buttonMenuUser(
+                          'assets/icons/papers.png', 'ชำระภาษีรถตนเอง'),
+                    ),
+                    InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CarRegistration(
+                            type: 'V',
                           ),
                         ),
-                        child: buttonMenuUser(
-                            'assets/icons/papers.png', 'ข้อมูลสมาชิก'),
                       ),
-                      InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SettingNotificationPage(),
-                          ),
+                      child: buttonMenuUser(
+                          'assets/icons/papers.png', 'ตรวจสภาพรถ'),
+                    ),
+                    // InkWell(
+                    //   onTap: () => Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => ImageBinaryPage(),
+                    //     ),
+                    //   ),
+                    //   child: buttonMenuUser(
+                    //       'assets/icons/link.png', 'ดึงรูปใบสั่ง (เบต้า)'),
+                    // ),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: const Text(
+                        versionName,
+                        style: TextStyle(
+                          fontSize: 9,
                         ),
-                        child: buttonMenuUser(
-                            'assets/icons/bell.png', 'ตั้งค่าการแจ้งเตือน'),
                       ),
-                      // InkWell(
-                      //   onTap: () async {
-                      //     final msg = model['idcard'] == ''
-                      //         ? await showDialog(
-                      //             context: context,
-                      //             builder: (BuildContext context) {
-                      //               return _buildDialogRegister();
-                      //             })
-                      //         : model['isDF'] != true
-                      //             ? await showDialog(
-                      //                 context: context,
-                      //                 builder: (BuildContext context) {
-                      //                   return _buildDialogdriverLicence();
-                      //                 })
-                      //             : await Navigator.push(
-                      //                 context,
-                      //                 MaterialPageRoute(
-                      //                   builder: (context) => DriversInfo(),
-                      //                 ),
-                      //               );
-                      //     if (!msg) {
-                      //       _read();
-                      //     }
-                      //   },
-                      //   child:
-                      //       buttonMenuUser('assets/car.png', 'ข้อมูลใบขับขี่'),
-                      // ),
-
-                      // InkWell(
-                      //   onTap: () => Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => AboutUsForm(
-                      //         model: _futureAboutUs,
-                      //         title: 'ติดต่อเรา',
-                      //       ),
-                      //     ),
-                      //   ),
-                      //   child: buttonMenuUser(
-                      //       'assets/icons/phone.png', 'ติดต่อเรา'),
-                      // ),
-                      InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ConnectSocialPage(),
-                          ),
-                        ),
-                        child: buttonMenuUser(
-                            'assets/icons/link.png', 'การเชื่อมต่อ'),
-                      ),
-                      InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChangePasswordPage(),
-                          ),
-                        ),
-                        child: buttonMenuUser(
-                            'assets/icons/lock.png', 'เปลี่ยนรหัสผ่าน'),
-                      ),
-                      InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CarRegistration(
-                              type: 'C',
+                    ),
+                    Container(
+                      // color: Colors.red,
+                      // width: 200,
+                      margin: const EdgeInsets.only(top: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () => logout(context),
+                            child: const Icon(
+                              Icons.power_settings_new,
+                              color: Colors.red,
                             ),
                           ),
-                        ),
-                        child: buttonMenuUser(
-                            'assets/icons/papers.png', 'ชำระภาษีรถตนเอง'),
-                      ),
-                      InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CarRegistration(
-                              type: 'V',
-                            ),
+                          const SizedBox(
+                            width: 5,
                           ),
-                        ),
-                        child: buttonMenuUser(
-                            'assets/icons/papers.png', 'ตรวจสภาพรถ'),
-                      ),
-                      // InkWell(
-                      //   onTap: () => Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => ImageBinaryPage(),
-                      //     ),
-                      //   ),
-                      //   child: buttonMenuUser(
-                      //       'assets/icons/link.png', 'ดึงรูปใบสั่ง (เบต้า)'),
-                      // ),
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: const Text(
-                          versionName,
-                          style: TextStyle(
-                            fontSize: 9,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        // color: Colors.red,
-                        // width: 200,
-                        margin: const EdgeInsets.only(top: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () => logout(context),
-                              child: const Icon(
-                                Icons.power_settings_new,
+                          InkWell(
+                            onTap: () => logout(context),
+                            child: const Text(
+                              'ออกจากระบบ',
+                              style: TextStyle(
+                                fontFamily: 'Sarabun',
+                                fontSize: 15,
                                 color: Colors.red,
                               ),
                             ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            InkWell(
-                              onTap: () => logout(context),
-                              child: const Text(
-                                'ออกจากระบบ',
-                                style: TextStyle(
-                                  fontFamily: 'Sarabun',
-                                  fontSize: 15,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
             ],
@@ -415,280 +411,24 @@ class _UserInformationPageState extends State<UserInformationPage> {
             width: 15,
           ),
           Expanded(
-            child: Container(
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontFamily: 'Sarabun',
-                  fontSize: 15.0,
-                  color: Color(0xFF4A4A4A),
-                ),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontFamily: 'Sarabun',
+                fontSize: 15.0,
+                color: Color(0xFF4A4A4A),
               ),
             ),
           ),
-          Container(
-            child: const Icon(
-              Icons.arrow_forward_ios,
-              color: Color(0xFF4A4A4A),
-              size: 20,
-            ),
+          const Icon(
+            Icons.arrow_forward_ios,
+            color: Color(0xFF4A4A4A),
+            size: 20,
           ),
         ],
       ),
     );
   }
 
-  _buildDialogRegister() {
-    return WillPopScope(
-      onWillPop: () {
-        return Future.value(false);
-      },
-      child: CustomAlertDialog(
-        contentPadding: const EdgeInsets.all(0),
-        content: Container(
-          width: 325,
-          height: 300,
-          decoration: const BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: Color(0xFFFFFF),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                Image.asset(
-                  'assets/check_register.png',
-                  height: 50,
-                ),
-                // Icon(
-                //   Icons.check_circle_outline_outlined,
-                //   color: Color(0xFF5AAC68),
-                //   size: 60,
-                // ),
-                const SizedBox(height: 10),
-                const Text(
-                  'ยืนยันตัวตน',
-                  style: TextStyle(
-                    fontFamily: 'Sarabun',
-                    fontSize: 15,
-                    color: Color(0xFF4D4D4D),
-                  ),
-                ),
-                const SizedBox(height: 15),
-                const Text(
-                  'กรุณาลงทะเบียนด้วยบัตรประชาชน',
-                  style: TextStyle(
-                    fontFamily: 'Sarabun',
-                    fontSize: 13,
-                    color: Color(0xFF4D4D4D),
-                  ),
-                ),
-                const Text(
-                  'เพื่อเชื่อมต่อใบอนุญาต และข้อมูลพาหนะในครอบครอง',
-                  style: TextStyle(
-                    fontFamily: 'Sarabun',
-                    fontSize: 13,
-                    color: Color(0xFF4D4D4D),
-                  ),
-                ),
-                const SizedBox(height: 50),
-                Container(height: 0.5, color: const Color(0xFFcfcfcf)),
-                InkWell(
-                  onTap: () async {
-                    Navigator.pop(context, false);
-                    final msg = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => IDCardVerification(),
-                      ),
-                    );
-                    if (!msg) {
-                      _read();
-                    }
-                  },
-                  child: Container(
-                    height: 50,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'ลงทะเบียนเพื่อตรวจสอบใบอนุญาต',
-                      style: TextStyle(
-                        fontFamily: 'Sarabun',
-                        fontSize: 13,
-                        color: Color(0xFF4D4D4D),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(height: 0.5, color: const Color(0xFFcfcfcf)),
-                Expanded(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      // color: Color(0xFF9C0000),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      ),
-                    ),
-                    height: 45,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'ยกเลิก',
-                      style: TextStyle(
-                        fontFamily: 'Sarabun',
-                        fontSize: 13,
-                        color: Color(0xFF9C0000),
-                      ),
-                    ),
-                  ),
-                )),
-              ],
-            ),
-          ),
-          // child: //Contents here
-        ),
-      ),
-    );
-  }
 
-  _buildDialogdriverLicence() {
-    return WillPopScope(
-      onWillPop: () {
-        return Future.value(false);
-      },
-      child: CustomAlertDialog(
-        contentPadding: const EdgeInsets.all(0),
-        content: Container(
-          width: 325,
-          height: 300,
-          // width: MediaQuery.of(context).size.width / 1.3,
-          // height: MediaQuery.of(context).size.height / 2.5,
-          decoration: const BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: Color(0xFFFFFF),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                Image.asset(
-                  'assets/check_register.png',
-                  height: 50,
-                ),
-                // Icon(
-                //   Icons.check_circle_outline_outlined,
-                //   color: Color(0xFF5AAC68),
-                //   size: 60,
-                // ),
-                const SizedBox(height: 10),
-                const Text(
-                  'ยืนยันตัวตร',
-                  style: TextStyle(
-                    fontFamily: 'Sarabun',
-                    fontSize: 15,
-                    // color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'กรุณายืนยันตัวผ่านตัวเลือกดังต่อไปนี้',
-                  style: TextStyle(
-                    fontFamily: 'Sarabun',
-                    fontSize: 15,
-                    color: Color(0xFF4D4D4D),
-                  ),
-                ),
-                const SizedBox(height: 28),
-                Container(height: 0.5, color: const Color(0xFFcfcfcf)),
-                InkWell(
-                  onTap: () async {
-                    // Navigator.pop(context,false);
-                    final msg = await Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RegisterWithDriverLicense(),
-                      ),
-                    );
-
-                    if (!msg) {
-                      _read();
-                    }
-                  },
-                  child: Container(
-                    height: 45,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'ยืนยันตัวตนผ่านใบขับขี่',
-                      style: TextStyle(
-                        fontFamily: 'Sarabun',
-                        fontSize: 15,
-                        color: Color(0xFF4D4D4D),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(height: 0.5, color: const Color(0xFFcfcfcf)),
-                InkWell(
-                  onTap: () async {
-                    // Navigator.pop(context,false);
-                    final msg = await Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RegisterWithLicensePlate(),
-                      ),
-                    );
-                    if (!msg) {
-                      _read();
-                    }
-                  },
-                  child: Container(
-                    height: 45,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'ยืนยันตัวตนผ่านทะเบียนรถที่ครอบครอง',
-                      style: TextStyle(
-                        fontFamily: 'Sarabun',
-                        fontSize: 15,
-                        color: Color(0xFF4D4D4D),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(height: 0.5, color: const Color(0xFFcfcfcf)),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: Container(
-                    height: 45,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'ยกเลิก',
-                      style: TextStyle(
-                        fontFamily: 'Sarabun',
-                        fontSize: 15,
-                        color: Color(0xFF9C0000),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // child: //Contents here
-        ),
-      ),
-    );
-  }
 }

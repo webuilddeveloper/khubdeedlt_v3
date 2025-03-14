@@ -972,8 +972,8 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
             child: Wrap(
               children: <Widget>[
                 ListTile(
-                    leading: Icon(Icons.photo_library),
-                    title: Text(
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text(
                       'อัลบั้มรูปภาพ',
                       style: TextStyle(
                         fontSize: 13,

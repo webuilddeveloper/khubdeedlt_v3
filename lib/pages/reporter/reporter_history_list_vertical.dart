@@ -37,6 +37,7 @@ class _ReporterHistoryListVertical extends State<ReporterHistoryListVertical> {
   checkImageAvatar(String img) {
     return CircleAvatar(
       backgroundColor: Colors.white,
+      // ignore: unnecessary_null_comparison
       backgroundImage: img != null
           ? NetworkImage(
               img,

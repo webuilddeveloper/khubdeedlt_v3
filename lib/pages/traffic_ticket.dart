@@ -2,7 +2,6 @@ import 'package:weconnect/pages/blank_page/blank_loading.dart';
 import 'package:weconnect/pages/traffic_ticket_detail.dart';
 import 'package:weconnect/shared/api_provider.dart';
 import 'package:weconnect/shared/extension.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weconnect/component/header.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -49,7 +48,7 @@ class _TrafficTicketPageState extends State<TrafficTicket> {
         },
         title: 'ใบสั่ง',
       ),
-      backgroundColor: Color(0xFFF5F8FB),
+      backgroundColor: const Color(0xFFF5F8FB),
       body: InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
@@ -492,27 +491,27 @@ class _TrafficTicketPageState extends State<TrafficTicket> {
   statusBox(String value) {
     var status = '';
     List<Color> colors = [
-      Color(0xFF07C9A8),
-      Color(0xFF03996F),
+      const Color(0xFF07C9A8),
+      const Color(0xFF03996F),
     ];
     if (value == '1') {
       status = 'ค้างชำระ';
       colors = [
-        Color(0xFFFF2525),
-        Color(0xFFBC0611),
+        const Color(0xFFFF2525),
+        const Color(0xFFBC0611),
       ];
     } else if (value == '2') {
       status = 'เกินกำหนดแล้วยังไม่ชำระ';
       colors = [
-        Color(0xFFFFC200),
-        Color(0xFFFF7B06),
+        const Color(0xFFFFC200),
+        const Color(0xFFFF7B06),
       ];
     } else if (value == '3') {
       status = 'ชำระแล้ว';
     }
     return Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.symmetric(horizontal: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 7),
       height: 30,
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -524,7 +523,7 @@ class _TrafficTicketPageState extends State<TrafficTicket> {
       ),
       child: Text(
         status,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Sarabun',
           fontSize: 11,
           color: Colors.white,
@@ -553,7 +552,7 @@ class _TrafficTicketPageState extends State<TrafficTicket> {
     });
     _read();
 
-    await Future.delayed(Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 1000));
 
     _refreshController.loadComplete();
   }

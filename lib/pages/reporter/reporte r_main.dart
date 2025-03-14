@@ -18,7 +18,7 @@ class ReporterMain extends StatefulWidget {
 }
 
 class _ReporterMain extends State<ReporterMain> {
-  final storage = new FlutterSecureStorage();
+  final storage =  FlutterSecureStorage();
 
   bool hideSearch = true;
   final txtDescription = TextEditingController();
@@ -310,7 +310,7 @@ class _ReporterMain extends State<ReporterMain> {
                                 image: DecorationImage(
                                   fit: BoxFit.fill,
                                   image: AssetImage(
-                                    'assets/background/reporter_news.png',
+                                    'assets/background/reporter_s.png',
                                   ),
                                 ),
                               ),

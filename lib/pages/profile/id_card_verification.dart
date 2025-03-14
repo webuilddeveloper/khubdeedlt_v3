@@ -5,13 +5,14 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:weconnect/component/header.dart';
 
 import '../../home_v2.dart';
 import '../../component/material/custom_alert_dialog.dart';
 import '../../component/material/field_item.dart';
 import '../../shared/api_provider.dart';
 import '../../shared/extension.dart';
-import '../../widget/header.dart';
+
 import 'register_with_diver_license.dart';
 import 'register_with_license_plate.dart';
 

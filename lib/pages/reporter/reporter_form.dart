@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:weconnect/component/header.dart';
@@ -13,11 +12,11 @@ import 'package:weconnect/widget/text_form_field.dart';
 
 class ReporterFormPage extends StatefulWidget {
   const ReporterFormPage({
-    Key? key,
+    super.key,
     this.title,
     this.code,
     this.imageUrl,
-  }) : super(key: key);
+  });
 
   final String? title;
   final String? code;
@@ -28,7 +27,7 @@ class ReporterFormPage extends StatefulWidget {
 }
 
 class _ReporterFormPageState extends State<ReporterFormPage> {
-  final storage = new FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -158,15 +157,15 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
       "description": txtDescription.text,
       "enDescription": txtDescription.text,
       "category": widget.code,
-      "latitude": latitude.toString() ?? '',
-      "longitude": longitude.toString() ?? '',
+      "latitude": latitude.toString(),
+      "longitude": longitude.toString(),
       "createBy": user['username'] ?? '',
       "firstName": user['firstName'] ?? '',
       "lastName": user['lastName'] ?? '',
       "imageUrlCreateBy": user['imageUrl'] ?? '',
       "imageUrl": widget.imageUrl ?? '',
       "gallery": _itemImage,
-      "province": currentLocation ?? '',
+      "province": currentLocation,
       "lv0": user['lv0'],
       "lv1": user['lv1'],
       "lv2": user['lv2'],
@@ -281,12 +280,12 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
         child: ListView(
           controller: scrollController,
           shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           children: <Widget>[
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(top: 5.0),
             ),
-            Text(
+            const Text(
               '* หัวข้อ',
               style: TextStyle(
                 fontSize: 18.00,
@@ -294,7 +293,7 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(height: 5.0),
+            const SizedBox(height: 5.0),
             textFormField(
               txtTitle,
               '',
@@ -304,8 +303,8 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
               false,
               false,
             ),
-            SizedBox(height: 15.0),
-            Text(
+            const SizedBox(height: 15.0),
+            const Text(
               '* รายละเอียด',
               style: TextStyle(
                 fontSize: 18.00,
@@ -314,7 +313,7 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
               ),
             ),
             TextFormField(
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color(0xFF000070),
                 fontWeight: FontWeight.normal,
                 fontFamily: 'Sarabun',
@@ -329,7 +328,7 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: BorderSide.none,
                 ),
-                errorStyle: TextStyle(
+                errorStyle: const TextStyle(
                   fontWeight: FontWeight.normal,
                   fontFamily: 'Sarabun',
                   fontSize: 10.0,
@@ -339,6 +338,7 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
                 if (model!.isEmpty) {
                   return 'กรุณากรอกรายละเอียด.';
                 }
+                return null;
               },
               controller: txtDescription,
               enabled: true,
@@ -346,12 +346,12 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
               minLines: 1, //Normal textInputField will be displayed
               maxLines: null,
             ),
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             Row(
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.6,
-                  child: Column(
+                  child: const Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -374,7 +374,7 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -383,14 +383,14 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
                         width: 35.0,
                         height: 35.0,
                         decoration: BoxDecoration(
-                          color: Color(0xFFFF7514),
+                          color: const Color(0xFFFF7514),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: MaterialButton(
                           onPressed: () {
                             _showPickerImage(context);
                           },
-                          padding: EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: Image.asset(
                             'assets/logo/icons/picture.png',
                             height: 20.0,
@@ -403,20 +403,20 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
                 ),
               ],
             ),
-            if (_itemImage.length > 0)
+            if (_itemImage.isNotEmpty)
               Container(
-                padding: EdgeInsets.only(top: 10.0),
+                padding: const EdgeInsets.only(top: 10.0),
                 child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     childAspectRatio: 1 / 1,
                   ),
-                  physics: ClampingScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: _itemImage.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      margin: EdgeInsets.only(top: 5.0),
+                      margin: const EdgeInsets.only(top: 5.0),
                       width: 400,
                       child: MaterialButton(
                         onPressed: () {
@@ -433,8 +433,8 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
                   },
                 ),
               ),
-            SizedBox(height: 15.0),
-            Text(
+            const SizedBox(height: 15.0),
+            const Text(
               'ตำแหน่ง',
               style: TextStyle(
                 fontSize: 18.00,
@@ -443,13 +443,13 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
               ),
             ),
             if (markerSelect.length > 0 && isShowMap)
-              Container(
+              SizedBox(
                 height: 250.0,
                 child: GoogleMap(
                   initialCameraPosition: CameraPosition(
                     target: LatLng(
-                      latitude != null ? latitude : 13.743894,
-                      longitude != null ? longitude : 100.538592,
+                      latitude,
+                      longitude,
                     ),
                     zoom: 14,
                   ),
@@ -469,7 +469,7 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(
-                      color: Color(0xFFFF7514),
+                      color: const Color(0xFFFF7514),
                     ),
                   ),
                   child: MaterialButton(
@@ -508,12 +508,8 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
                                         child: GoogleMap(
                                           initialCameraPosition: CameraPosition(
                                             target: LatLng(
-                                              latitude != null
-                                                  ? latitude
-                                                  : 13.743894,
-                                              longitude != null
-                                                  ? longitude
-                                                  : 100.538592,
+                                              latitude,
+                                              longitude,
                                             ),
                                             zoom: 14,
                                           ),
@@ -680,8 +676,6 @@ class _ReporterFormPageState extends State<ReporterFormPage> {
   }
 
   void _upload() async {
-    if (_image == null) return;
-
     Random random = new Random();
     uploadImage(_image).then((res) {
       setState(() {

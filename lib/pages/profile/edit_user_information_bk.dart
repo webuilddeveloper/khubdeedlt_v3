@@ -8,9 +8,10 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:weconnect/component/header.dart';
 
 import '../../shared/api_provider.dart';
-import '../../widget/header.dart';
+
 import '../../widget/text_form_field.dart';
 import '../blank_page/dialog_fail.dart';
 import 'user_information.dart';
@@ -195,9 +196,8 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                                   padding: const EdgeInsets.all(10.0),
                                   child: Image.asset(
                                     'assets/images/user_not_found.png',
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondary,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                         ),
@@ -220,8 +220,8 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
                               image: DecorationImage(
                                 fit: BoxFit.contain,
                                 alignment: Alignment.center,
-                                image: AssetImage(
-                                    "assets/logo/icons/Group37.png"),
+                                image:
+                                    AssetImage("assets/logo/icons/Group37.png"),
                               ),
                             ),
                           ),
@@ -554,8 +554,7 @@ class _EditUserInformationPageState extends State<EditUserInformationPage> {
     user['postnoCode'] = _selectedPostalCode ?? '';
     user['idcard'] = txtIdCard.text;
     user['officerCode'] = txtOfficerCode.text;
-    user['linkAccount'] =
-        user['linkAccount'] ?? '';
+    user['linkAccount'] = user['linkAccount'] ?? '';
     user['appleID'] = user['appleID'] ?? "";
 
     final result = await postObjectData('m/Register/update', user);

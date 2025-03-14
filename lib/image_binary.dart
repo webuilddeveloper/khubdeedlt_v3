@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:weconnect/component/header.dart';
 import 'shared/api_provider.dart';
-import 'widget/header.dart';
 
 class ImageBinaryPage extends StatefulWidget {
   @override

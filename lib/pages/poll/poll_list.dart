@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:weconnect/component/header.dart';
 import '../../component/key_search.dart';
 import '../../component/tab_category.dart';
-import '../../shared/api_provider.dart'  as service;
+import '../../shared/api_provider.dart' as service;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../widget/header.dart';
 import 'poll_list_vertical.dart';
 
 class PollList extends StatefulWidget {
@@ -85,7 +85,7 @@ class _PollList extends State<PollList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: header(context, goBack, title: widget.title),
+      appBar: header(context, goBack, title: widget.title!),
       body: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (OverscrollIndicatorNotification overScroll) {
           overScroll.disallowIndicator();

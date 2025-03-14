@@ -4,7 +4,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../shared/api_provider.dart';
 import '../shared/extension.dart';
-import '../widget/header.dart';
+import 'package:weconnect/component/header.dart';
 import 'traffic_ticket_detail.dart';
 
 class TrafficTicketTMP extends StatefulWidget {
@@ -20,6 +20,7 @@ class _TrafficTicketTMPPageState extends State<TrafficTicketTMP> {
   int _limit = 10;
   int selectedCategory = 0;
 
+  // ignore: prefer_final_fields
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
